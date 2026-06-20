@@ -277,11 +277,13 @@ async function run() {
   }
 
   // ---------------------------------------------------------------------
-  // Banners
+  // Banners + slide images
   // ---------------------------------------------------------------------
   payload.logger.info('🖼️   Seeding banners…')
+  const slideImageIds: number[] = []
   for (const b of bannersData) {
     const image = await uploadArt(payload, b.title, b.seedKey)
+    slideImageIds.push(image.id as number)
     await payload.create({
       collection: 'banners',
       data: {
@@ -505,6 +507,177 @@ async function run() {
       overrideAccess: true,
     })
   }
+
+  // ---------------------------------------------------------------------
+  // Globals — HomePage
+  // ---------------------------------------------------------------------
+  payload.logger.info('🏠  Seeding home page global…')
+
+  const latestIds = productsData
+    .slice(0, 10)
+    .map((p) => productIdBySlug.get(p.slug))
+    .filter(Boolean)
+
+  const psIds = productsData
+    .filter((p) => p.platform === 'playstation')
+    .slice(0, 10)
+    .map((p) => productIdBySlug.get(p.slug))
+    .filter(Boolean)
+
+  const xboxIds = productsData
+    .filter((p) => p.platform === 'xbox')
+    .slice(0, 10)
+    .map((p) => productIdBySlug.get(p.slug))
+    .filter(Boolean)
+
+  const switchIds = productsData
+    .filter((p) => p.platform === 'switch')
+    .slice(0, 10)
+    .map((p) => productIdBySlug.get(p.slug))
+    .filter(Boolean)
+
+  const accessoryIds = productsData
+    .filter((p) => p.platform === 'pc' || p.platform === 'universal')
+    .slice(0, 10)
+    .map((p) => productIdBySlug.get(p.slug))
+    .filter(Boolean)
+
+  await payload.updateGlobal({
+    slug: 'home-page' as any,
+    data: {
+      heroSlides: bannersData.map((b, i) => ({
+        eyebrow: b.eyebrow,
+        title: b.title,
+        subtitle: b.subtitle,
+        image: slideImageIds[i],
+        ctaLabel: b.ctaLabel,
+        ctaHref: b.ctaHref,
+        theme: b.theme,
+      })),
+      valueProps: [
+        {
+          icon: 'truck',
+          title: 'Nationwide express delivery',
+          description:
+            'Cash on delivery across Pakistan. Orders dispatched within 24 hours, metro cities in 24–48 hrs.',
+          accent: 'violet',
+        },
+        {
+          icon: 'shield-check',
+          title: '100% authentic gear',
+          description:
+            'Every console, controller and title verified as genuine — sourced direct from authorized distributors.',
+          accent: 'cyan',
+        },
+        {
+          icon: 'badge-check',
+          title: 'Official warranty support',
+          description:
+            'Manufacturer-backed warranty and hassle-free returns — we handle it all locally.',
+          accent: 'emerald',
+        },
+        {
+          icon: 'headset',
+          title: 'Dedicated gamer support',
+          description:
+            'Real humans who play what you play — reach us 7 days a week via WhatsApp, email and DM.',
+          accent: 'magenta',
+        },
+      ],
+      latestArrivals: {
+        eyebrow: 'Just dropped',
+        title: 'Latest arrivals',
+        description:
+          'Fresh off the shelves — the newest consoles, accessories and titles to land at NEXORA.',
+        href: '/shop?sort=newest',
+        products: latestIds,
+      },
+      platformSection: {
+        eyebrow: 'Shop by platform',
+        title: 'Built for your setup, whatever it is.',
+        description:
+          'From living-room consoles to full PC battle-stations — find gear matched to your platform.',
+        cards: [
+          {
+            label: 'PlayStation',
+            eyebrow: 'PS5 & PS4',
+            description: 'DualSense haptics, console exclusives and next-gen hardware.',
+            href: '/shop?platform=playstation',
+            platform: 'playstation',
+            tag: 'Most Popular',
+          },
+          {
+            label: 'Xbox',
+            eyebrow: 'Series X|S',
+            description: 'Game Pass, Elite controllers and Xbox exclusives at speed.',
+            href: '/shop?platform=xbox',
+            platform: 'xbox',
+          },
+          {
+            label: 'Nintendo Switch',
+            eyebrow: 'Switch & OLED',
+            description: 'Joy-Cons, OLED model and every must-have Nintendo title.',
+            href: '/shop?platform=switch',
+            platform: 'switch',
+          },
+          {
+            label: 'PC Gaming',
+            eyebrow: 'Peripherals',
+            description: 'Mechanical keyboards, precision mice, headsets and racing wheels.',
+            href: '/shop?platform=pc',
+            platform: 'pc',
+          },
+        ],
+      },
+      platformRails: [
+        {
+          eyebrow: 'PlayStation',
+          title: 'For your PS5 & PS4 setup',
+          href: '/shop?platform=playstation',
+          products: psIds,
+        },
+        {
+          eyebrow: 'Xbox',
+          title: 'Series X|S essentials',
+          href: '/shop?platform=xbox',
+          products: xboxIds,
+        },
+        {
+          eyebrow: 'Nintendo Switch',
+          title: 'Handheld & party favourites',
+          href: '/shop?platform=switch',
+          products: switchIds,
+        },
+      ],
+      brandStripHeading: "Trusted gear from the world's best",
+      promoBand: {
+        eyebrow: 'Trade-in & upgrade',
+        title: 'Got old gear? Trade it in for instant credit.',
+        subtitle:
+          'Consoles, controllers and headsets accepted. Get an instant valuation online or in-store and roll it straight into your next order — no hassle, no waiting.',
+        tags: [
+          { label: 'Instant valuation' },
+          { label: 'Same-day credit' },
+          { label: 'Any condition' },
+        ],
+        primaryCtaLabel: 'Get a valuation',
+        primaryCtaHref: '/contact',
+        secondaryCtaLabel: 'Browse all products',
+        secondaryCtaHref: '/shop',
+      },
+      categoryRails: [
+        {
+          eyebrow: 'Accessories',
+          title: 'Level up your loadout',
+          description:
+            'Controllers, headsets, racing wheels and more — engineered for competitive edge.',
+          href: '/shop?category=accessories',
+          products: accessoryIds,
+        },
+      ],
+    } as any,
+    overrideAccess: true,
+  })
 
   // ---------------------------------------------------------------------
   // Globals — Header / Footer / SiteSettings

@@ -108,11 +108,13 @@ export interface Config {
     'site-settings': SiteSetting;
     header: Header;
     footer: Footer;
+    'home-page': HomePage;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -460,7 +462,14 @@ export interface Banner {
   eyebrow?: string | null;
   title: string;
   subtitle?: string | null;
+  /**
+   * Background image. Also used as the video poster when a video URL is set.
+   */
   image: number | Media;
+  /**
+   * Optional: paste a direct MP4 URL to play a looping background video instead of the static image. The image above is used as the loading poster.
+   */
+  videoUrl?: string | null;
   ctaLabel?: string | null;
   ctaHref?: string | null;
   theme?: ('violet' | 'magenta' | 'cyan') | null;
@@ -870,6 +879,7 @@ export interface BannersSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
   image?: T;
+  videoUrl?: T;
   ctaLabel?: T;
   ctaHref?: T;
   theme?: T;
@@ -1007,6 +1017,138 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: number;
+  /**
+   * Slides shown in the homepage hero carousel. Use an image, or paste an MP4 URL for a looping video background.
+   */
+  heroSlides?:
+    | {
+        /**
+         * Small badge text above the title, e.g. "New Arrival"
+         */
+        eyebrow?: string | null;
+        title: string;
+        subtitle?: string | null;
+        /**
+         * Background image. Also used as the video poster when a video URL is set.
+         */
+        image: number | Media;
+        /**
+         * Optional: paste a direct MP4 URL to play a looping background video. The image above is used as the loading poster.
+         */
+        videoUrl?: string | null;
+        ctaLabel?: string | null;
+        ctaHref?: string | null;
+        theme?: ('violet' | 'magenta' | 'cyan') | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Trust-badge cards shown below the hero slider.
+   */
+  valueProps?:
+    | {
+        icon: 'truck' | 'shield-check' | 'badge-check' | 'headset' | 'zap';
+        title: string;
+        description: string;
+        accent: 'violet' | 'cyan' | 'emerald' | 'magenta';
+        id?: string | null;
+      }[]
+    | null;
+  latestArrivals?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    description?: string | null;
+    href?: string | null;
+    /**
+     * Select up to 10 products to feature as latest arrivals.
+     */
+    products?: (number | Product)[] | null;
+  };
+  platformSection?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Platform browse cards. The Platform field controls the accent colour and icon.
+     */
+    cards?:
+      | {
+          label: string;
+          eyebrow?: string | null;
+          description?: string | null;
+          href: string;
+          platform: 'playstation' | 'xbox' | 'switch' | 'pc' | 'universal';
+          /**
+           * Optional badge text, e.g. "Most Popular"
+           */
+          tag?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Product rails after the platform grid (e.g. PlayStation, Xbox, Switch). Rail 1 appears above the Brand Strip; rail 2 above the Promo Band; the rest follow after.
+   */
+  platformRails?:
+    | {
+        eyebrow: string;
+        title: string;
+        description?: string | null;
+        href?: string | null;
+        /**
+         * Select up to 10 products for this rail.
+         */
+        products?: (number | Product)[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Small label shown above the scrolling brand logos.
+   */
+  brandStripHeading?: string | null;
+  promoBand?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    subtitle?: string | null;
+    /**
+     * Feature tag pills shown below the subtitle.
+     */
+    tags?:
+      | {
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    primaryCtaLabel?: string | null;
+    primaryCtaHref?: string | null;
+    secondaryCtaLabel?: string | null;
+    secondaryCtaHref?: string | null;
+  };
+  /**
+   * Category-based product rails shown at the bottom of the page. Admin hand-picks up to 10 products per rail.
+   */
+  categoryRails?:
+    | {
+        eyebrow: string;
+        title: string;
+        description?: string | null;
+        href?: string | null;
+        /**
+         * Select up to 10 products for this rail.
+         */
+        products?: (number | Product)[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -1077,6 +1219,102 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T;
       };
   bottomText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  heroSlides?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        subtitle?: T;
+        image?: T;
+        videoUrl?: T;
+        ctaLabel?: T;
+        ctaHref?: T;
+        theme?: T;
+        id?: T;
+      };
+  valueProps?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        accent?: T;
+        id?: T;
+      };
+  latestArrivals?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        href?: T;
+        products?: T;
+      };
+  platformSection?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        cards?:
+          | T
+          | {
+              label?: T;
+              eyebrow?: T;
+              description?: T;
+              href?: T;
+              platform?: T;
+              tag?: T;
+              id?: T;
+            };
+      };
+  platformRails?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        href?: T;
+        products?: T;
+        id?: T;
+      };
+  brandStripHeading?: T;
+  promoBand?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        subtitle?: T;
+        tags?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
+        primaryCtaLabel?: T;
+        primaryCtaHref?: T;
+        secondaryCtaLabel?: T;
+        secondaryCtaHref?: T;
+      };
+  categoryRails?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        href?: T;
+        products?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

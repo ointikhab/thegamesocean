@@ -19,6 +19,15 @@ export const Banners: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       required: true,
+      admin: { description: 'Background image. Also used as the video poster when a video URL is set.' },
+    },
+    {
+      name: 'videoUrl',
+      type: 'text',
+      admin: {
+        description:
+          'Optional: paste a direct MP4 URL to play a looping background video instead of the static image. The image above is used as the loading poster.',
+      },
     },
     { name: 'ctaLabel', type: 'text', defaultValue: 'Shop now' },
     { name: 'ctaHref', type: 'text', defaultValue: '/shop' },

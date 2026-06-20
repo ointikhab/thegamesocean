@@ -1,7 +1,7 @@
 import { resolveImage } from '@/lib/media'
 import type { Brand } from '@/payload-types'
 
-export function BrandStrip({ brands }: { brands: Brand[] }) {
+export function BrandStrip({ brands, heading }: { brands: Brand[]; heading?: string | null }) {
   if (brands.length === 0) return null
   const loop = [...brands, ...brands]
 
@@ -16,7 +16,7 @@ export function BrandStrip({ brands }: { brands: Brand[] }) {
 
       <div className="relative mx-auto mb-5 max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <p className="text-center font-display text-[10px] font-bold uppercase tracking-[0.4em] text-ink-300">
-          Trusted gear from the world&apos;s best
+          {heading ?? "Trusted gear from the world’s best"}
         </p>
       </div>
 
