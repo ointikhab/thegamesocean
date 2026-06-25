@@ -21,13 +21,13 @@ function paragraphsToLexical(paragraphs: string[]) {
   return {
     root: {
       type: 'root',
-      format: '',
+      format: '' as const,
       indent: 0,
       version: 1,
       direction: 'ltr' as const,
       children: paragraphs.map((text) => ({
         type: 'paragraph',
-        format: '',
+        format: '' as const,
         indent: 0,
         version: 1,
         direction: 'ltr' as const,
@@ -206,7 +206,7 @@ async function run() {
     const id = categoryIdBySlug.get(cat.slug)
     const parentId = categoryIdBySlug.get(cat.parent)
     if (!id || !parentId) continue
-    await payload.update({ collection: 'categories', id, data: { parent: parentId }, overrideAccess: true })
+    await payload.update({ collection: 'categories', id, data: { parent: parentId as number }, overrideAccess: true })
   }
 
   // ---------------------------------------------------------------------
@@ -228,8 +228,8 @@ async function run() {
         status: p.status ?? 'active',
         featured: p.featured ?? false,
         platform: p.platform,
-        category: categoryIds as (string | number)[],
-        brand: brandId,
+        category: categoryIds as number[],
+        brand: brandId as number,
         sku: p.sku,
         price: p.price,
         compareAtPrice: p.compareAtPrice,
@@ -360,8 +360,8 @@ async function run() {
     await payload.create({
       collection: 'reviews',
       data: {
-        product: productId,
-        customer: customerId,
+        product: productId as number,
+        customer: customerId as number,
         rating: r.rating,
         title: r.title,
         comment: r.comment,
@@ -388,7 +388,7 @@ async function run() {
   if (ayeshaId) {
     const items = [
       {
-        product: productIdBySlug.get(dualsense.slug),
+        product: productIdBySlug.get(dualsense.slug) as number,
         titleSnapshot: dualsense.title,
         variantLabel: 'Cosmic Red',
         quantity: 1,
@@ -396,7 +396,7 @@ async function run() {
         lineTotal: 19999,
       },
       {
-        product: productIdBySlug.get(spiderman.slug),
+        product: productIdBySlug.get(spiderman.slug) as number,
         titleSnapshot: spiderman.title,
         quantity: 1,
         unitPrice: spiderman.price,
@@ -410,7 +410,7 @@ async function run() {
         orderNumber: 'NEX-100231',
         status: 'delivered',
         paymentMethod: 'cod',
-        customer: ayeshaId,
+        customer: ayeshaId as number,
         items,
         subtotal,
         shippingCost: 0,
@@ -433,7 +433,7 @@ async function run() {
 
     const items2 = [
       {
-        product: productIdBySlug.get(switchOled.slug),
+        product: productIdBySlug.get(switchOled.slug) as number,
         titleSnapshot: switchOled.title,
         quantity: 1,
         unitPrice: switchOled.price,
@@ -447,7 +447,7 @@ async function run() {
         orderNumber: 'NEX-100255',
         status: 'processing',
         paymentMethod: 'cod',
-        customer: ayeshaId,
+        customer: ayeshaId as number,
         items: items2,
         subtotal: subtotal2,
         shippingCost: 0,
@@ -471,7 +471,7 @@ async function run() {
   if (hamzaId) {
     const items = [
       {
-        product: productIdBySlug.get(xboxPad.slug),
+        product: productIdBySlug.get(xboxPad.slug) as number,
         titleSnapshot: xboxPad.title,
         variantLabel: 'Robot White',
         quantity: 2,
@@ -487,7 +487,7 @@ async function run() {
         orderNumber: 'NEX-100278',
         status: 'shipped',
         paymentMethod: 'cod',
-        customer: hamzaId,
+        customer: hamzaId as number,
         items,
         subtotal,
         shippingCost,

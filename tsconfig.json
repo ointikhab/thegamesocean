@@ -30,7 +30,8 @@
         "./src/payload.config.ts"
       ]
     },
-    "target": "ES2022"
+    "target": "ES2022",
+    "allowArbitraryExtensions": true
   },
   "include": [
     "next-env.d.ts",

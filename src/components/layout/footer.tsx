@@ -60,7 +60,7 @@ export function Footer({ siteSettings, footer }: { siteSettings: SiteSetting; fo
               and the latest titles across every platform.
             </p>
 
-            {footer?.socialLinks?.length ? (
+            {siteSettings?.socialLinks?.length ? (
               <div className="mt-5 flex gap-2">
                 {(siteSettings?.socialLinks ?? []).map((s) => {
                   const Icon = socialIcons[s.platform] ?? Send
