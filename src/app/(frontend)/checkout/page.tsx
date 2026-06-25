@@ -120,7 +120,7 @@ export default function CheckoutPage() {
       setPlaced(true)
       show({ title: 'Order placed!', description: "We'll contact you to confirm your COD delivery.", variant: 'success' })
     } catch (err) {
-      show({ title: 'Something went wrong', description: String(err), variant: 'error' })
+      show({ title: 'Something went wrong', description: String(err), variant: 'info' })
     } finally {
       setPlacing(false)
     }
