@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { isAdmin } from '@/access'
+import { ADMIN_EMAIL, orderAdminEmailHtml, sendEmail } from '@/lib/email'
 
 const isAdminOrOwner = ({ req: { user } }: { req: { user: any } }) => {
   if (user?.collection === 'users') return true
@@ -111,4 +112,27 @@ export const Orders: CollectionConfig = {
     },
   ],
   timestamps: true,
+  hooks: {
+    afterChange: [
+      async ({ doc, operation }) => {
+        if (operation !== 'create') return doc
+        try {
+          await sendEmail({
+            to: ADMIN_EMAIL,
+            subject: `[NEXORA] New Order ${doc.orderNumber} — Rs.${doc.total?.toLocaleString()}`,
+            html: orderAdminEmailHtml({
+              orderNumber: doc.orderNumber,
+              total: doc.total,
+              shippingAddress: doc.shippingAddress,
+              items: doc.items ?? [],
+              notes: doc.notes,
+            }),
+          })
+        } catch (err) {
+          console.error('[Orders] admin email error:', err)
+        }
+        return doc
+      },
+    ],
+  },
 }

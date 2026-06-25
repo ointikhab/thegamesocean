@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from 'next/font/google'
 import React from 'react'
 
 import { CartDrawer } from '@/components/layout/cart-drawer'
+import { ChatWidget } from '@/components/layout/chat-widget'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { getPayloadClient } from '@/lib/payload'
@@ -51,6 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Footer siteSettings={siteSettings} footer={footer} />
           </div>
           <CartDrawer />
+          <ChatWidget />
         </Providers>
       </body>
     </html>

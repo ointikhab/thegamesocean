@@ -78,6 +78,7 @@ export interface Config {
     orders: Order;
     banners: Banner;
     pages: Page;
+    'support-tickets': SupportTicket;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -95,6 +96,7 @@ export interface Config {
     orders: OrdersSelect<false> | OrdersSelect<true>;
     banners: BannersSelect<false> | BannersSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    'support-tickets': SupportTicketsSelect<false> | SupportTicketsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -505,6 +507,27 @@ export interface Page {
   createdAt: string;
 }
 /**
+ * Customer support queries submitted via the chat widget.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "support-tickets".
+ */
+export interface SupportTicket {
+  id: number;
+  customerName: string;
+  customerEmail: string;
+  subject: string;
+  message: string;
+  status?: ('open' | 'replied' | 'closed') | null;
+  /**
+   * Write your reply here — saving will automatically email the customer.
+   */
+  reply?: string | null;
+  repliedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -567,6 +590,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'support-tickets';
+        value: number | SupportTicket;
       } | null);
   globalSlug?: string | null;
   user:
@@ -896,6 +923,21 @@ export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "support-tickets_select".
+ */
+export interface SupportTicketsSelect<T extends boolean = true> {
+  customerName?: T;
+  customerEmail?: T;
+  subject?: T;
+  message?: T;
+  status?: T;
+  reply?: T;
+  repliedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

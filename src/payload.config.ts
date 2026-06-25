@@ -14,6 +14,7 @@ import { Orders } from './collections/Orders'
 import { Pages } from './collections/Pages'
 import { Products } from './collections/Products'
 import { Reviews } from './collections/Reviews'
+import { SupportTickets } from './collections/SupportTickets'
 import { Users } from './collections/Users'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
@@ -33,7 +34,7 @@ export default buildConfig({
       titleSuffix: '— NEXORA Admin',
     },
   },
-  collections: [Users, Customers, Media, Brands, Categories, Products, Reviews, Orders, Banners, Pages],
+  collections: [Users, Customers, Media, Brands, Categories, Products, Reviews, Orders, Banners, Pages, SupportTickets],
   globals: [SiteSettings, Header, Footer, HomePage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
