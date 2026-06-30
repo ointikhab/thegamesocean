@@ -88,6 +88,13 @@ function buildSpecs(p: SeedProduct): { label: string; value: string }[] {
 }
 
 async function clearAll(payload: Payload) {
+  // Globals can hold relationships into `media`; clear them first so the
+  // media delete below doesn't hit a foreign-key violation (which Postgres
+  // then reports as a confusing "transaction aborted" error on whatever
+  // query runs next).
+  await payload.updateGlobal({ slug: 'home-page' as any, data: { heroSlides: [] }, overrideAccess: true })
+  await payload.updateGlobal({ slug: 'site-settings', data: { logo: null }, overrideAccess: true })
+
   const order = [
     'orders',
     'reviews',
