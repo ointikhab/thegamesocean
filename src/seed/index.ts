@@ -49,7 +49,7 @@ function paragraphsToLexical(paragraphs: string[]) {
 
 const CLOSING_COPY: Record<'console' | 'game' | 'accessory', string> = {
   console:
-    'Every console ships sealed and region-checked, backed by The Games Ocean's 14-day replacement guarantee and the full manufacturer warranty — genuine hardware, honoured locally.',
+    "Every console ships sealed and region-checked, backed by The Games Ocean's 14-day replacement guarantee and the full manufacturer warranty — genuine hardware, honoured locally.",
   game: 'Sourced exclusively from authorized regional distributors — genuine, region-compatible, and ready to drop straight into your library.',
   accessory:
     'Validated on our in-house QA bench for comfort, durability and competitive-grade performance — engineered for marathon sessions and ranked nights alike.',
