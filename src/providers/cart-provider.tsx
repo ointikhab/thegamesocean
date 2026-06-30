@@ -30,7 +30,7 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null)
 
-const STORAGE_KEY = 'nexora.cart.v1'
+const STORAGE_KEY = 'thegamesocean.cart.v1'
 
 function makeId(productId: number, variantLabel?: string) {
   return `${productId}::${variantLabel ?? 'default'}`

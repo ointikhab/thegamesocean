@@ -31,7 +31,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      titleSuffix: '— NEXORA Admin',
+      titleSuffix: '— The Games Ocean Admin',
     },
   },
   collections: [Users, Customers, Media, Brands, Categories, Products, Reviews, Orders, Banners, Pages, SupportTickets],

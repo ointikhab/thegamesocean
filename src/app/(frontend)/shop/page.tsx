@@ -11,8 +11,8 @@ import { getPayloadClient } from '@/lib/payload'
 import type { Where } from 'payload'
 
 export const metadata: Metadata = {
-  title: 'Shop All — NEXORA',
-  description: 'Browse the full NEXORA catalog — consoles, controllers, headsets, racing wheels and the latest titles across every platform.',
+  title: 'Shop All — The Games Ocean',
+  description: 'Browse the full The Games Ocean catalog — consoles, controllers, headsets, racing wheels and the latest titles across every platform.',
 }
 
 export const revalidate = 60
@@ -79,7 +79,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
   const activeBrand = brand ? brandsRes.docs.find((b) => b.slug === brand) : null
 
   let heading = 'Shop all gear'
-  let eyebrow = 'NEXORA catalog'
+  let eyebrow = 'The Games Ocean catalog'
   if (q) {
     heading = `Results for “${q}”`
     eyebrow = 'Search'

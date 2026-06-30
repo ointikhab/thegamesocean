@@ -49,7 +49,7 @@ function paragraphsToLexical(paragraphs: string[]) {
 
 const CLOSING_COPY: Record<'console' | 'game' | 'accessory', string> = {
   console:
-    'Every console ships sealed and region-checked, backed by NEXORA’s 14-day replacement guarantee and the full manufacturer warranty — genuine hardware, honoured locally.',
+    'Every console ships sealed and region-checked, backed by The Games Ocean's 14-day replacement guarantee and the full manufacturer warranty — genuine hardware, honoured locally.',
   game: 'Sourced exclusively from authorized regional distributors — genuine, region-compatible, and ready to drop straight into your library.',
   accessory:
     'Validated on our in-house QA bench for comfort, durability and competitive-grade performance — engineered for marathon sessions and ranked nights alike.',
@@ -163,7 +163,7 @@ async function uploadProductImages(payload: Payload, p: SeedProduct) {
 async function run() {
   const payload = await getPayload({ config })
 
-  payload.logger.info('🌱  Clearing existing NEXORA data…')
+  payload.logger.info('🌱  Clearing existing The Games Ocean data…')
   await clearAll(payload)
 
   // ---------------------------------------------------------------------
@@ -320,9 +320,9 @@ async function run() {
   await payload.create({
     collection: 'users',
     data: {
-      email: 'admin@nexora.gg',
-      password: 'NexoraAdmin#2026',
-      name: 'NEXORA Admin',
+      email: 'admin@thegamesocean.com',
+      password: 'GamesOceanAdmin#2026',
+      name: 'The Games Ocean Admin',
       role: 'admin',
     },
     overrideAccess: true,
@@ -588,7 +588,7 @@ async function run() {
         eyebrow: 'Just dropped',
         title: 'Latest arrivals',
         description:
-          'Fresh off the shelves — the newest consoles, accessories and titles to land at NEXORA.',
+          'Fresh off the shelves — the newest consoles, accessories and titles to land at The Games Ocean.',
         href: '/shop?sort=newest',
         products: latestIds,
       },
@@ -836,13 +836,13 @@ async function run() {
         {
           heading: 'Company',
           links: [
-            { label: 'About NEXORA', href: '/about' },
+            { label: 'About The Games Ocean', href: '/about' },
             { label: 'Privacy Policy', href: '/privacy-policy' },
             { label: 'Terms of Service', href: '/terms-of-service' },
           ],
         },
       ],
-      bottomText: `© ${new Date().getFullYear()} NEXORA. All rights reserved. Designed for players, built for Pakistan.`,
+      bottomText: `© ${new Date().getFullYear()} The Games Ocean. All rights reserved. Designed for players, built for Pakistan.`,
     },
     overrideAccess: true,
   })
@@ -850,25 +850,25 @@ async function run() {
   await payload.updateGlobal({
     slug: 'site-settings',
     data: {
-      storeName: 'NEXORA',
+      storeName: 'THE GAMES OCEAN',
       tagline: 'Next-Level Gear',
       currency: 'PKR',
       announcementText: 'Free express delivery across Pakistan on orders over Rs. 15,000 — pay cash on delivery',
-      contactEmail: 'support@nexora.gg',
+      contactEmail: 'support@thegamesocean.com',
       contactPhone: '+92 300 1234567',
       address: 'Gulberg III, Lahore, Pakistan',
       socialLinks: [
-        { platform: 'instagram', href: 'https://instagram.com/nexora.gg' },
-        { platform: 'facebook', href: 'https://facebook.com/nexora.gg' },
-        { platform: 'youtube', href: 'https://youtube.com/@nexora.gg' },
-        { platform: 'discord', href: 'https://discord.gg/nexora' },
+        { platform: 'instagram', href: 'https://instagram.com/thegamesocean' },
+        { platform: 'facebook', href: 'https://facebook.com/thegamesocean' },
+        { platform: 'youtube', href: 'https://youtube.com/@thegamesocean' },
+        { platform: 'discord', href: 'https://discord.gg/thegamesocean' },
       ],
     },
     overrideAccess: true,
   })
 
-  payload.logger.info('✅  NEXORA seed complete!')
-  payload.logger.info('   Admin login → admin@nexora.gg / NexoraAdmin#2026')
+  payload.logger.info('✅  The Games Ocean seed complete!')
+  payload.logger.info('   Admin login → admin@thegamesocean.com / GamesOceanAdmin#2026')
   payload.logger.info('   Customer login → ayesha.khan@example.com / Customer#123')
 }
 

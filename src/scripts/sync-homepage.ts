@@ -114,7 +114,7 @@ async function run() {
         eyebrow: 'Just dropped',
         title: 'Latest arrivals',
         description:
-          'Fresh off the shelves — the newest consoles, accessories and titles to land at NEXORA.',
+          'Fresh off the shelves — the newest consoles, accessories and titles to land at The Games Ocean.',
         href: '/shop?sort=newest',
         products: latest.docs.map((p) => p.id),
       },

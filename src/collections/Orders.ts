@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { isAdmin } from '@/access'
 import { ADMIN_EMAIL, orderAdminEmailHtml, sendEmail } from '@/lib/email'
+import { sendAdminSms } from '@/lib/sms'
 
 const isAdminOrOwner = ({ req: { user } }: { req: { user: any } }) => {
   if (user?.collection === 'users') return true
@@ -119,7 +120,7 @@ export const Orders: CollectionConfig = {
         try {
           await sendEmail({
             to: ADMIN_EMAIL,
-            subject: `[NEXORA] New Order ${doc.orderNumber} — Rs.${doc.total?.toLocaleString()}`,
+            subject: `[The Games Ocean] New Order ${doc.orderNumber} — Rs.${doc.total?.toLocaleString()}`,
             html: orderAdminEmailHtml({
               orderNumber: doc.orderNumber,
               total: doc.total,
@@ -128,8 +129,11 @@ export const Orders: CollectionConfig = {
               notes: doc.notes,
             }),
           })
+          await sendAdminSms(
+            `Hi Mohsin, new order with order id: ${doc.orderNumber} has fallen, please contact customer`,
+          )
         } catch (err) {
-          console.error('[Orders] admin email error:', err)
+          console.error('[Orders] admin notification error:', err)
         }
         return doc
       },

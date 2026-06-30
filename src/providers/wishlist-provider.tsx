@@ -10,7 +10,7 @@ type WishlistContextValue = {
 
 const WishlistContext = createContext<WishlistContextValue | null>(null)
 
-const STORAGE_KEY = 'nexora.wishlist.v1'
+const STORAGE_KEY = 'thegamesocean.wishlist.v1'
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [ids, setIds] = useState<number[]>([])
