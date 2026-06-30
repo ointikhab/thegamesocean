@@ -26,6 +26,6 @@ export const Footer: GlobalConfig = {
         },
       ],
     },
-    { name: 'bottomText', type: 'text', defaultValue: '© NEXORA. All rights reserved.' },
+    { name: 'bottomText', type: 'text', defaultValue: '© The Games Ocean. All rights reserved.' },
   ],
 }

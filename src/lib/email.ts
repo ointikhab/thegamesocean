@@ -26,7 +26,7 @@ export async function sendEmail({
     return
   }
   await transporter.sendMail({
-    from: `"NEXORA Gaming" <${process.env.SMTP_USER}>`,
+    from: `"The Games Ocean" <${process.env.SMTP_USER}>`,
     to: Array.isArray(to) ? to.join(', ') : to,
     subject,
     html,
@@ -60,7 +60,7 @@ export function orderAdminEmailHtml(order: {
 <body style="margin:0;padding:0;background:#0d0d14;font-family:'Segoe UI',Arial,sans-serif;color:#e0e0f0;">
   <div style="max-width:600px;margin:40px auto;background:#16161f;border-radius:16px;overflow:hidden;border:1px solid #2d2d3a;">
     <div style="background:linear-gradient(135deg,#7c3aed,#00e5ff);padding:24px 32px;">
-      <h1 style="margin:0;color:#fff;font-size:22px;letter-spacing:0.5px;">🎮 New Order — NEXORA</h1>
+      <h1 style="margin:0;color:#fff;font-size:22px;letter-spacing:0.5px;">🎮 New Order — The Games Ocean</h1>
       <p style="margin:6px 0 0;color:rgba(255,255,255,0.75);font-size:13px;">${order.orderNumber}</p>
     </div>
     <div style="padding:28px 32px;">
@@ -89,7 +89,7 @@ export function orderAdminEmailHtml(order: {
       </div>
     </div>
     <div style="padding:16px 32px;background:#0d0d14;font-size:12px;color:#555;text-align:center;">
-      NEXORA Admin · <a href="${process.env.NEXT_PUBLIC_SERVER_URL}/admin/collections/orders" style="color:#7c3aed;">View in Admin Panel</a>
+      The Games Ocean Admin · <a href="${process.env.NEXT_PUBLIC_SERVER_URL}/admin/collections/orders" style="color:#7c3aed;">View in Admin Panel</a>
     </div>
   </div>
 </body>
@@ -111,7 +111,7 @@ export function supportTicketAdminEmailHtml(ticket: {
   <div style="max-width:600px;margin:40px auto;background:#16161f;border-radius:16px;overflow:hidden;border:1px solid #2d2d3a;">
     <div style="background:linear-gradient(135deg,#00e5ff,#7c3aed);padding:24px 32px;">
       <h1 style="margin:0;color:#fff;font-size:22px;">💬 New Support Query</h1>
-      <p style="margin:6px 0 0;color:rgba(255,255,255,0.75);font-size:13px;">NEXORA Gaming</p>
+      <p style="margin:6px 0 0;color:rgba(255,255,255,0.75);font-size:13px;">The Games Ocean</p>
     </div>
     <div style="padding:28px 32px;">
       <table style="width:100%;font-size:14px;border-collapse:collapse;">
@@ -140,11 +140,11 @@ export function supportTicketReplyEmailHtml(ticket: {
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>Reply from NEXORA</title></head>
+<head><meta charset="utf-8"><title>Reply from The Games Ocean</title></head>
 <body style="margin:0;padding:0;background:#f5f5f7;font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;">
   <div style="max-width:600px;margin:40px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
     <div style="background:linear-gradient(135deg,#7c3aed,#00e5ff);padding:24px 32px;">
-      <h1 style="margin:0;color:#fff;font-size:20px;">🎮 NEXORA Gaming Support</h1>
+      <h1 style="margin:0;color:#fff;font-size:20px;">🎮 The Games Ocean Support</h1>
     </div>
     <div style="padding:28px 32px;">
       <p style="margin:0 0 16px;font-size:15px;">Hi <strong>${ticket.customerName}</strong>,</p>
@@ -163,7 +163,7 @@ export function supportTicketReplyEmailHtml(ticket: {
       <p style="margin:24px 0 0;font-size:13px;color:#888;">If you have more questions, reply to this email or use the chat widget on our website.</p>
     </div>
     <div style="padding:16px 32px;background:#f5f5f7;font-size:12px;color:#aaa;text-align:center;">
-      © NEXORA Gaming Pakistan · nexoragaming.pk
+      © The Games Ocean Pakistan · thegamesocean.com
     </div>
   </div>
 </body>
@@ -178,7 +178,7 @@ export function supportTicketAckEmailHtml(ticket: { customerName: string; subjec
 <body style="margin:0;padding:0;background:#f5f5f7;font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;">
   <div style="max-width:600px;margin:40px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
     <div style="background:linear-gradient(135deg,#7c3aed,#00e5ff);padding:24px 32px;">
-      <h1 style="margin:0;color:#fff;font-size:20px;">🎮 NEXORA Gaming Support</h1>
+      <h1 style="margin:0;color:#fff;font-size:20px;">🎮 The Games Ocean Support</h1>
     </div>
     <div style="padding:28px 32px;">
       <p style="margin:0 0 12px;font-size:15px;">Hi <strong>${ticket.customerName}</strong>,</p>
@@ -191,7 +191,7 @@ export function supportTicketAckEmailHtml(ticket: { customerName: string; subjec
       </div>
     </div>
     <div style="padding:16px 32px;background:#f5f5f7;font-size:12px;color:#aaa;text-align:center;">
-      © NEXORA Gaming Pakistan
+      © The Games Ocean Pakistan
     </div>
   </div>
 </body>

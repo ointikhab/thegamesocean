@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 
 import { Logo } from '@/components/layout/logo'
 import { cn } from '@/lib/utils'
-import type { Header as HeaderGlobal, SiteSetting } from '@/payload-types'
+import type { Header as HeaderGlobal, Media, SiteSetting } from '@/payload-types'
 import { useAuth } from '@/providers/auth-provider'
 import { useCart } from '@/providers/cart-provider'
 import { useToast } from '@/providers/toast-provider'
@@ -41,6 +41,14 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
   }, [])
 
   const navItems = header?.navItems ?? []
+  const logoSrc = (() => {
+    const url =
+      siteSettings?.logo && typeof siteSettings.logo === 'object'
+        ? (siteSettings.logo as Media).url
+        : null
+    if (!url) return undefined
+    try { return new URL(url).pathname } catch { return url }
+  })()
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -75,7 +83,7 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           {/* Left: Logo + Nav */}
           <div className="flex items-center gap-8">
-            <Logo label={siteSettings?.storeName || 'NEXORA'} />
+            <Logo label={siteSettings?.storeName || 'THE GAMES OCEAN'} src={logoSrc} />
             <nav className="hidden items-center gap-0.5 lg:flex">
               {navItems.map((item) => (
                 <NavMenuItem key={item.id ?? item.label} item={item} />
@@ -267,7 +275,7 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
             <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-violet-glow via-cyan-glow to-magenta-glow" />
 
             <div className="mb-8 flex items-center justify-between">
-              <Logo label={siteSettings?.storeName || 'NEXORA'} />
+              <Logo label={siteSettings?.storeName || 'THE GAMES OCEAN'} src={logoSrc} />
               <Dialog.Close asChild>
                 <button
                   aria-label="Close menu"

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import React from 'react'
 
+import { AnnouncementTicker } from '@/components/layout/announcement-ticker'
 import { CartDrawer } from '@/components/layout/cart-drawer'
 import { ChatWidget } from '@/components/layout/chat-widget'
 import { Footer } from '@/components/layout/footer'
@@ -25,11 +26,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'NEXORA — Next-Level Gaming Gear',
-    template: '%s · NEXORA',
+    default: 'The Games Ocean — Next-Level Gaming Gear',
+    template: '%s · The Games Ocean',
   },
   description:
-    'NEXORA is Pakistan’s premium destination for gaming consoles, accessories, and titles — PlayStation, Xbox, Nintendo Switch & PC.',
+    'The Games Ocean is Pakistan’s premium destination for gaming consoles, accessories, and titles — PlayStation, Xbox, Nintendo Switch & PC.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),
 }
 
@@ -39,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const payload = await getPayloadClient()
 
   const [siteSettings, header, footer] = await Promise.all([
-    payload.findGlobal({ slug: 'site-settings' }),
+    payload.findGlobal({ slug: 'site-settings', depth: 1 }),
     payload.findGlobal({ slug: 'header' }),
     payload.findGlobal({ slug: 'footer' }),
   ])
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Providers>
           <div className="relative flex min-h-screen flex-col">
             <Header siteSettings={siteSettings} header={header} />
+            <AnnouncementTicker siteSettings={siteSettings} />
             <main className="flex-1">{children}</main>
             <Footer siteSettings={siteSettings} footer={footer} />
           </div>

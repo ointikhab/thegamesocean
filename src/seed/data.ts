@@ -3993,12 +3993,12 @@ export const bannersData = [
 
 export const pagesData = [
   {
-    title: 'About NEXORA',
+    title: 'About The Games Ocean',
     slug: 'about',
     paragraphs: [
-      'NEXORA was founded with a simple belief: gamers in Pakistan deserve a store that feels as premium as the gear it sells. We hand-pick consoles, accessories and titles from authorized distributors, and back every order with genuine warranties and real local support.',
+      'The Games Ocean was founded with a simple belief: gamers in Pakistan deserve a store that feels as premium as the gear it sells. We hand-pick consoles, accessories and titles from authorized distributors, and back every order with genuine warranties and real local support.',
       "From competitive peripherals to the latest exclusives, our team tests everything that lands on our shelves — because we're players first, retailers second.",
-      'Whether you are building your first setup or chasing the final percentile of competitive edge, NEXORA is here to get you there — fast, authentic and without the markup games.',
+      'Whether you are building your first setup or chasing the final percentile of competitive edge, The Games Ocean is here to get you there — fast, authentic and without the markup games.',
     ],
   },
   {
@@ -4006,8 +4006,8 @@ export const pagesData = [
     slug: 'contact',
     paragraphs: [
       "Have a question about an order, a product or a partnership? Our support team is online seven days a week and typically replies within a few hours.",
-      'Email us at support@nexora.gg, call +92 300 1234567, or message us on Instagram and Discord — we read every single one.',
-      'For business and brand partnership enquiries, reach out to partnerships@nexora.gg and our team will get back to you within two business days.',
+      'Email us at support@thegamesocean.com, call +92 300 1234567, or message us on Instagram and Discord — we read every single one.',
+      'For business and brand partnership enquiries, reach out to partnerships@thegamesocean.com and our team will get back to you within two business days.',
     ],
   },
   {
@@ -4023,16 +4023,16 @@ export const pagesData = [
     title: 'Privacy Policy',
     slug: 'privacy-policy',
     paragraphs: [
-      'NEXORA collects only the information needed to process your orders, support your account and improve your shopping experience — your name, contact details, shipping address and order history.',
+      'The Games Ocean collects only the information needed to process your orders, support your account and improve your shopping experience — your name, contact details, shipping address and order history.',
       'We never sell your personal information to third parties. Payment is collected on delivery, so we do not store any card or banking details on our servers.',
-      'You can request a copy of your data, or ask us to delete your account and associated information, at any time by emailing privacy@nexora.gg.',
+      'You can request a copy of your data, or ask us to delete your account and associated information, at any time by emailing privacy@thegamesocean.com.',
     ],
   },
   {
     title: 'Terms of Service',
     slug: 'terms-of-service',
     paragraphs: [
-      'By placing an order with NEXORA, you agree to provide accurate shipping and contact information and to be available to receive your order at the address provided for Cash on Delivery.',
+      'By placing an order with The Games Ocean, you agree to provide accurate shipping and contact information and to be available to receive your order at the address provided for Cash on Delivery.',
       'Prices listed are in Pakistani Rupees (PKR) and include all applicable taxes unless stated otherwise. We reserve the right to correct pricing or stock errors prior to dispatch.',
       'All product names, logos and brands referenced on this site are the property of their respective owners and are used for identification purposes only.',
     ],
@@ -4134,7 +4134,7 @@ export const reviewsData: ReviewSeed[] = [
     customerEmail: 'bilal.ahmed@example.com',
     rating: 5,
     title: 'Silent, fast, and Game Pass is unbeatable',
-    comment: 'Quick Resume alone is worth the upgrade. Console runs whisper quiet even during long Forza sessions. NEXORA had the best price I could find anywhere.',
+    comment: 'Quick Resume alone is worth the upgrade. Console runs whisper quiet even during long Forza sessions. The Games Ocean had the best price I could find anywhere.',
   },
   {
     productSlug: 'nintendo-switch-oled-model',

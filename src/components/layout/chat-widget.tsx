@@ -105,7 +105,7 @@ export function ChatWidget() {
                   </div>
 
                   <div>
-                    <p className="font-display text-[13px] font-bold text-white">NEXORA Support</p>
+                    <p className="font-display text-[13px] font-bold text-white">The Games Ocean Support</p>
                     <div className="flex items-center gap-1.5">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                       <span className="text-[11px] text-white/50">Online · Replies within 24h</span>

@@ -55,7 +55,7 @@ export default function SignupPage() {
     })
     setLoading(false)
     if (result.error) { setErrors({ general: result.error }); return }
-    show({ title: 'Account created!', description: `Welcome to NEXORA, ${form.firstName}!`, variant: 'success' })
+    show({ title: 'Account created!', description: `Welcome to The Games Ocean, ${form.firstName}!`, variant: 'success' })
     router.push('/')
   }
 
@@ -70,7 +70,7 @@ export default function SignupPage() {
         <div className="mb-8 text-center">
           <div className="mb-6 flex justify-center"><Logo /></div>
           <h1 className="font-display text-2xl font-bold text-ink-900">Create your account</h1>
-          <p className="mt-2 text-sm text-ink-500">Join NEXORA and start building your setup</p>
+          <p className="mt-2 text-sm text-ink-500">Join The Games Ocean and start building your setup</p>
         </div>
 
         <div className="rounded-2xl border border-surface-200 bg-white p-8 shadow-[0_4px_32px_rgba(0,0,0,0.08)]">

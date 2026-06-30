@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { Logo } from '@/components/layout/logo'
 import { NewsletterForm } from '@/components/layout/newsletter-form'
-import type { Footer as FooterGlobal, SiteSetting } from '@/payload-types'
+import type { Footer as FooterGlobal, Media, SiteSetting } from '@/payload-types'
 
 const socialIcons: Record<string, React.ElementType> = {
   facebook: Globe,
@@ -16,6 +16,14 @@ const socialIcons: Record<string, React.ElementType> = {
 
 export function Footer({ siteSettings, footer }: { siteSettings: SiteSetting; footer: FooterGlobal }) {
   const columns = footer?.columns ?? []
+  const logoSrc = (() => {
+    const url =
+      siteSettings?.logo && typeof siteSettings.logo === 'object'
+        ? (siteSettings.logo as Media).url
+        : null
+    if (!url) return undefined
+    try { return new URL(url).pathname } catch { return url }
+  })()
 
   return (
     <footer className="relative mt-20 border-t border-surface-200 bg-white">
@@ -54,7 +62,7 @@ export function Footer({ siteSettings, footer }: { siteSettings: SiteSetting; fo
         {/* Main footer columns */}
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-5">
           <div className="col-span-2 lg:col-span-1">
-            <Logo label={siteSettings?.storeName || 'NEXORA'} />
+            <Logo label={siteSettings?.storeName || 'THE GAMES OCEAN'} src={logoSrc} />
             <p className="mt-4 max-w-xs text-xs leading-relaxed text-ink-400">
               {siteSettings?.tagline || 'Next-Level Gear'} — Pakistan&apos;s premium destination for consoles, accessories
               and the latest titles across every platform.
@@ -108,7 +116,7 @@ export function Footer({ siteSettings, footer }: { siteSettings: SiteSetting; fo
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-surface-200 pt-8 text-[11px] text-ink-400 sm:flex-row">
           <p>
             {footer?.bottomText ||
-              `© ${new Date().getFullYear()} ${siteSettings?.storeName || 'NEXORA'}. All rights reserved.`}
+              `© ${new Date().getFullYear()} ${siteSettings?.storeName || 'THE GAMES OCEAN'}. All rights reserved.`}
           </p>
           <div className="flex flex-wrap items-center gap-2">
             {['Cash on Delivery', 'Visa', 'Mastercard', siteSettings?.currency || 'PKR'].map((label) => (

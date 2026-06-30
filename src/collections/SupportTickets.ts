@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { ADMIN_EMAIL, sendEmail, supportTicketAckEmailHtml, supportTicketAdminEmailHtml, supportTicketReplyEmailHtml } from '@/lib/email'
+import { sendAdminSms } from '@/lib/sms'
 
 export const SupportTickets: CollectionConfig = {
   slug: 'support-tickets',
@@ -75,7 +76,7 @@ export const SupportTickets: CollectionConfig = {
             // Notify admin of new ticket
             await sendEmail({
               to: ADMIN_EMAIL,
-              subject: `[NEXORA Support] New query from ${doc.customerName}: ${doc.subject}`,
+              subject: `[The Games Ocean Support] New query from ${doc.customerName}: ${doc.subject}`,
               html: supportTicketAdminEmailHtml({
                 id: doc.id,
                 customerName: doc.customerName,
@@ -85,10 +86,12 @@ export const SupportTickets: CollectionConfig = {
               }),
             })
 
+            await sendAdminSms('A new inquiry has come.')
+
             // Acknowledge customer
             await sendEmail({
               to: doc.customerEmail,
-              subject: `We received your message — NEXORA Gaming`,
+              subject: `We received your message — The Games Ocean`,
               html: supportTicketAckEmailHtml({
                 customerName: doc.customerName,
                 subject: doc.subject,
@@ -101,7 +104,7 @@ export const SupportTickets: CollectionConfig = {
             // Send reply email to customer
             await sendEmail({
               to: doc.customerEmail,
-              subject: `Re: ${doc.subject} — NEXORA Gaming Support`,
+              subject: `Re: ${doc.subject} — The Games Ocean Support`,
               html: supportTicketReplyEmailHtml({
                 customerName: doc.customerName,
                 subject: doc.subject,

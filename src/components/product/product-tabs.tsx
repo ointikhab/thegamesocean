@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import type { Customer, Product, Review } from '@/payload-types'
 
 function reviewerName(customer: Review['customer']): string {
-  if (typeof customer !== 'object') return 'NEXORA customer'
+  if (typeof customer !== 'object') return 'The Games Ocean customer'
   const c = customer as Customer
   const last = c.lastName ? ` ${c.lastName.charAt(0)}.` : ''
   return `${c.firstName}${last}`
