@@ -992,6 +992,15 @@ export interface SiteSetting {
   logo?: (number | null) | Media;
   currency?: string | null;
   announcementText?: string | null;
+  /**
+   * Messages shown in the scrolling banner below the header.
+   */
+  tickerItems?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
   contactEmail?: string | null;
   contactPhone?: string | null;
   address?: string | null;
@@ -1199,6 +1208,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   logo?: T;
   currency?: T;
   announcementText?: T;
+  tickerItems?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
   contactEmail?: T;
   contactPhone?: T;
   address?: T;

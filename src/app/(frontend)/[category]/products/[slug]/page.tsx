@@ -34,10 +34,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const product = await getProduct(slug)
-  if (!product) return { title: 'Product not found — NEXORA' }
+  if (!product) return { title: 'Product not found — The Games Ocean' }
   return {
-    title: `${product.title} — NEXORA`,
-    description: product.shortDescription || `Shop ${product.title} at NEXORA.`,
+    title: `${product.title} — The Games Ocean`,
+    description: product.shortDescription || `Shop ${product.title} at The Games Ocean.`,
   }
 }
 

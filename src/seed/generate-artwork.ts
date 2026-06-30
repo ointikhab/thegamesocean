@@ -1,7 +1,7 @@
 import sharp from 'sharp'
 
 /**
- * Generates abstract gradient-mesh "hero art" tiles in the NEXORA palette to stand in for
+ * Generates abstract gradient-mesh "hero art" tiles in The Games Ocean palette to stand in for
  * real product photography during seeding. Deterministic per seed-key so re-seeding is stable.
  */
 

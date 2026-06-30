@@ -12,7 +12,7 @@ import { getPayloadClient } from '@/lib/payload'
 import type { HomePage, Product } from '@/payload-types'
 
 export const metadata: Metadata = {
-  title: 'NEXORA — Next-Level Gaming Gear',
+  title: 'The Games Ocean — Next-Level Gaming Gear',
 }
 
 export const revalidate = 60

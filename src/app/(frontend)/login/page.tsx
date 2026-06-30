@@ -113,7 +113,7 @@ export default function LoginPage() {
             <Logo />
           </div>
           <h1 className="font-display text-2xl font-bold text-ink-900">Welcome back</h1>
-          <p className="mt-2 text-sm text-ink-500">Sign in to your NEXORA account</p>
+          <p className="mt-2 text-sm text-ink-500">Sign in to your The Games Ocean account</p>
         </div>
 
         {/* Card */}
