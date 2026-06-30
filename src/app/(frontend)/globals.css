@@ -27,8 +27,8 @@
   --color-emerald-glow:  #059669;
 
   /* ── Fonts ── */
-  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --font-sans:    'Inter',         ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Segoe UI', var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans:    'Segoe UI', var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
 
   /* ── Radii ── */
   --radius-xl:  1rem;

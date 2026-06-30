@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Space_Grotesk } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import React from 'react'
 
 import { AnnouncementTicker } from '@/components/layout/announcement-ticker'
@@ -12,15 +12,9 @@ import { Providers } from '@/providers'
 
 import './globals.css'
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-})
-
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-inter',
   display: 'swap',
 })
 
@@ -46,8 +40,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   ])
 
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
-      <body className="bg-surface-100 font-sans text-ink-900 antialiased">
+    <html lang="en" className={inter.variable}>
+      <body className="bg-surface-100 font-sans text-ink-900 antialiased" suppressHydrationWarning>
         <Providers>
           <div className="relative flex min-h-screen flex-col">
             <Header siteSettings={siteSettings} header={header} />
