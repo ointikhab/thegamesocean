@@ -117,24 +117,26 @@ export const Orders: CollectionConfig = {
     afterChange: [
       async ({ doc, operation }) => {
         if (operation !== 'create') return doc
-        try {
-          await sendEmail({
-            to: ADMIN_EMAIL,
-            subject: `[The Games Ocean] New Order ${doc.orderNumber} — Rs.${doc.total?.toLocaleString()}`,
-            html: orderAdminEmailHtml({
-              orderNumber: doc.orderNumber,
-              total: doc.total,
-              shippingAddress: doc.shippingAddress,
-              items: doc.items ?? [],
-              notes: doc.notes,
-            }),
-          })
-          await sendAdminSms(
-            `Hi Mohsin, new order with order id: ${doc.orderNumber} has fallen, please contact customer`,
-          )
-        } catch (err) {
-          console.error('[Orders] admin notification error:', err)
-        }
+
+        // Fire-and-forget: admin notifications must never block the customer's
+        // checkout response. A slow/unreachable SMTP or SMS provider previously
+        // hung the order-create request for minutes (ETIMEDOUT on SMTP CONN).
+        void sendEmail({
+          to: ADMIN_EMAIL,
+          subject: `[The Games Ocean] New Order ${doc.orderNumber} — Rs.${doc.total?.toLocaleString()}`,
+          html: orderAdminEmailHtml({
+            orderNumber: doc.orderNumber,
+            total: doc.total,
+            shippingAddress: doc.shippingAddress,
+            items: doc.items ?? [],
+            notes: doc.notes,
+          }),
+        }).catch((err) => console.error('[Orders] admin email error:', err))
+
+        void sendAdminSms(
+          `Hi Mohsin, new order with order id: ${doc.orderNumber} has fallen, please contact customer`,
+        ).catch((err) => console.error('[Orders] admin sms error:', err))
+
         return doc
       },
     ],

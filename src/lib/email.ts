@@ -8,6 +8,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  connectionTimeout: 8_000,
+  greetingTimeout: 8_000,
+  socketTimeout: 8_000,
 })
 
 export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'omamaintikhab97@gmail.com'

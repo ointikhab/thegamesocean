@@ -16,6 +16,7 @@ export async function sendAdminSms(message: string) {
       receivernum: ADMIN_PHONE,
       textmessage: message,
     }),
+    signal: AbortSignal.timeout(8_000),
   })
 
   if (!res.ok) {
