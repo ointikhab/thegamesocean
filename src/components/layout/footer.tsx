@@ -1,4 +1,4 @@
-import { AtSign, Globe, MessagesSquare, Music2, PlayCircle, Send, Zap } from 'lucide-react'
+import { AtSign, Globe, Mail, MapPin, MessagesSquare, Music2, Phone, PlayCircle, Send, Zap } from 'lucide-react'
 import Link from 'next/link'
 
 import { Logo } from '@/components/layout/logo'
@@ -24,6 +24,11 @@ export function Footer({ siteSettings, footer }: { siteSettings: SiteSetting; fo
     if (!url) return undefined
     try { return new URL(url).pathname } catch { return url }
   })()
+
+  const email = siteSettings?.contactEmail || 'asifmohsin646@gmail.com'
+  const phone = siteSettings?.contactPhone || '+92 342 2904189'
+  const address = siteSettings?.address || 'Shop # 11 Anaya Mobile Mall, Gurumandir, Karachi'
+  const mapLink = siteSettings?.mapLink || 'https://maps.app.goo.gl/ZcYeKxXeASD8wkew8'
 
   return (
     <footer className="relative mt-20 border-t border-surface-200 bg-white">
@@ -67,6 +72,38 @@ export function Footer({ siteSettings, footer }: { siteSettings: SiteSetting; fo
               {siteSettings?.tagline || 'Next-Level Gear'} — Pakistan&apos;s premium destination for consoles, accessories
               and the latest titles across every platform.
             </p>
+
+            <ul className="mt-5 flex flex-col gap-2.5">
+              <li>
+                <a
+                  href={`mailto:${email}`}
+                  className="group flex items-center gap-2 text-xs text-ink-400 transition-colors hover:text-ink-900"
+                >
+                  <Mail size={13} className="shrink-0 text-violet-glow" />
+                  {email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`tel:${phone.replace(/\s+/g, '')}`}
+                  className="group flex items-center gap-2 text-xs text-ink-400 transition-colors hover:text-ink-900"
+                >
+                  <Phone size={13} className="shrink-0 text-violet-glow" />
+                  {phone}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={mapLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-start gap-2 text-xs text-ink-400 transition-colors hover:text-ink-900"
+                >
+                  <MapPin size={13} className="mt-0.5 shrink-0 text-violet-glow" />
+                  <span>{address}</span>
+                </a>
+              </li>
+            </ul>
 
             {siteSettings?.socialLinks?.length ? (
               <div className="mt-5 flex gap-2">

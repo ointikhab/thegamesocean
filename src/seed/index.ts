@@ -835,7 +835,7 @@ async function run() {
           heading: 'Support',
           links: [
             { label: 'Contact Us', href: '/contact' },
-            { label: 'Shipping & Returns', href: '/shipping-returns' },
+            { label: 'Refund & Exchange Policy', href: '/refund-exchange-policy' },
             { label: 'Track Your Order', href: '/account/orders' },
             { label: 'FAQs', href: '/contact' },
           ],
@@ -843,9 +843,9 @@ async function run() {
         {
           heading: 'Company',
           links: [
-            { label: 'About The Games Ocean', href: '/about' },
+            { label: 'About Us', href: '/about' },
             { label: 'Privacy Policy', href: '/privacy-policy' },
-            { label: 'Terms of Service', href: '/terms-of-service' },
+            { label: 'Terms & Conditions', href: '/terms-of-service' },
           ],
         },
       ],
@@ -861,9 +861,10 @@ async function run() {
       tagline: 'Next-Level Gear',
       currency: 'PKR',
       announcementText: 'Free express delivery across Pakistan on orders over Rs. 15,000 — pay cash on delivery',
-      contactEmail: 'support@thegamesocean.com',
-      contactPhone: '+92 300 1234567',
-      address: 'Gulberg III, Lahore, Pakistan',
+      contactEmail: 'asifmohsin646@gmail.com',
+      contactPhone: '+92 342 2904189',
+      address: 'Shop # 11 Anaya Mobile Mall, Gurumandir, Karachi',
+      mapLink: 'https://maps.app.goo.gl/ZcYeKxXeASD8wkew8',
       socialLinks: [
         { platform: 'instagram', href: 'https://instagram.com/thegamesocean' },
         { platform: 'facebook', href: 'https://facebook.com/thegamesocean' },

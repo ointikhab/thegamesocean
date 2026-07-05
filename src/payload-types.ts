@@ -1004,6 +1004,7 @@ export interface SiteSetting {
   contactEmail?: string | null;
   contactPhone?: string | null;
   address?: string | null;
+  mapLink?: string | null;
   socialLinks?:
     | {
         platform: 'facebook' | 'instagram' | 'twitter' | 'youtube' | 'tiktok' | 'discord';
@@ -1217,6 +1218,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   contactEmail?: T;
   contactPhone?: T;
   address?: T;
+  mapLink?: T;
   socialLinks?:
     | T
     | {

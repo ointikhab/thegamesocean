@@ -24,9 +24,10 @@ export const SiteSettings: GlobalConfig = {
         { name: 'text', type: 'text', required: true },
       ],
     },
-    { name: 'contactEmail', type: 'email', defaultValue: 'support@thegamesocean.com' },
-    { name: 'contactPhone', type: 'text', defaultValue: '+92 300 1234567' },
-    { name: 'address', type: 'text', defaultValue: 'Gulberg III, Lahore, Pakistan' },
+    { name: 'contactEmail', type: 'email', defaultValue: 'asifmohsin646@gmail.com' },
+    { name: 'contactPhone', type: 'text', defaultValue: '+92 342 2904189' },
+    { name: 'address', type: 'text', defaultValue: 'Shop # 11 Anaya Mobile Mall, Gurumandir, Karachi' },
+    { name: 'mapLink', type: 'text', label: 'Google Maps Link', defaultValue: 'https://maps.app.goo.gl/ZcYeKxXeASD8wkew8' },
     {
       name: 'socialLinks',
       type: 'array',
