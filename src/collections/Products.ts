@@ -57,6 +57,17 @@ export const Products: CollectionConfig = {
       ],
     },
     {
+      name: 'condition',
+      type: 'select',
+      defaultValue: 'new',
+      admin: { position: 'sidebar' },
+      options: [
+        { label: 'New', value: 'new' },
+        { label: 'Used', value: 'used' },
+        { label: 'Both (new & used)', value: 'both' },
+      ],
+    },
+    {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories',

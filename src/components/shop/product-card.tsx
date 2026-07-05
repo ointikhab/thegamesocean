@@ -228,6 +228,8 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
               {discount && !soldOut && <Badge variant="sale">-{discount}%</Badge>}
               {product.featured && !soldOut && <Badge variant="featured">Featured</Badge>}
               {soldOut && <Badge variant="soldout">Sold out</Badge>}
+              {product.condition === 'used' && <Badge variant="warning">Used</Badge>}
+              {product.condition === 'both' && <Badge variant="outline">New &amp; Used</Badge>}
             </div>
 
             {/* wishlist — top right */}

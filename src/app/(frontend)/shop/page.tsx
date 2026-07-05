@@ -47,6 +47,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
   const payload = await getPayloadClient()
 
   const platform = first(params.platform) || ''
+  const condition = first(params.condition) || ''
   const category = first(params.category) || ''
   const brand = first(params.brand) || ''
   const q = first(params.q) || ''
@@ -58,6 +59,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
 
   const and: Where[] = [{ status: { not_equals: 'draft' } }]
   if (platform) and.push({ platform: { equals: platform } })
+  if (condition) and.push({ condition: { equals: condition } })
   if (category) and.push({ 'category.slug': { equals: category } })
   if (brand) and.push({ 'brand.slug': { equals: brand } })
   if (q) and.push({ title: { like: q } })
@@ -99,6 +101,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
 
   const plainSearchParams: Record<string, string | undefined> = {
     platform: platform || undefined,
+    condition: condition || undefined,
     category: category || undefined,
     brand: brand || undefined,
     q: q || undefined,

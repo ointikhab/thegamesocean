@@ -16,6 +16,12 @@ const PLATFORMS = [
   { value: 'universal', label: 'Universal' },
 ]
 
+const CONDITIONS = [
+  { value: 'new', label: 'New' },
+  { value: 'used', label: 'Used' },
+  { value: 'both', label: 'Both (new & used)' },
+]
+
 const RATINGS = [4, 3, 2]
 
 export const PRICE_MIN = 0
@@ -77,6 +83,7 @@ export function ShopFilters({
   const searchParams = useSearchParams()
 
   const platform = searchParams.get('platform') ?? ''
+  const condition = searchParams.get('condition') ?? ''
   const category = searchParams.get('category') ?? ''
   const brand = searchParams.get('brand') ?? ''
   const minRating = Number(searchParams.get('rating') ?? 0)
@@ -109,6 +116,7 @@ export function ShopFilters({
 
   const hasActiveFilters = Boolean(
     platform ||
+      condition ||
       category ||
       brand ||
       minRating ||
@@ -143,6 +151,16 @@ export function ShopFilters({
           {PLATFORMS.map((p) => (
             <PillToggle key={p.value} active={platform === p.value} onClick={() => toggle('platform', p.value, platform)}>
               {p.label}
+            </PillToggle>
+          ))}
+        </div>
+      </FilterSection>
+
+      <FilterSection title="Condition">
+        <div className="flex flex-col gap-1">
+          {CONDITIONS.map((c) => (
+            <PillToggle key={c.value} active={condition === c.value} onClick={() => toggle('condition', c.value, condition)}>
+              {c.label}
             </PillToggle>
           ))}
         </div>

@@ -246,6 +246,7 @@ export interface Product {
   status?: ('active' | 'sold-out' | 'coming-soon' | 'draft') | null;
   featured?: boolean | null;
   platform?: ('playstation' | 'xbox' | 'switch' | 'pc' | 'universal') | null;
+  condition?: ('new' | 'used' | 'both') | null;
   category?: (number | Category)[] | null;
   brand?: (number | null) | Brand;
   sku?: string | null;
@@ -803,6 +804,7 @@ export interface ProductsSelect<T extends boolean = true> {
   status?: T;
   featured?: T;
   platform?: T;
+  condition?: T;
   category?: T;
   brand?: T;
   sku?: T;

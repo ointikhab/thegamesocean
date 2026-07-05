@@ -231,8 +231,8 @@ export function ProductPurchasePanel({
           </motion.div>
         </AnimatePresence>
 
-        {/* stock badge */}
-        <div className="mt-3">
+        {/* stock + condition badges */}
+        <div className="mt-3 flex flex-wrap gap-2">
           {soldOut ? (
             <Badge variant="soldout">Currently sold out</Badge>
           ) : lowStock ? (
@@ -240,6 +240,8 @@ export function ProductPurchasePanel({
           ) : (
             <Badge variant="success">In stock &amp; ready to ship</Badge>
           )}
+          {product.condition === 'used' && <Badge variant="warning">Used</Badge>}
+          {product.condition === 'both' && <Badge variant="outline">New &amp; Used</Badge>}
         </div>
       </div>
 
