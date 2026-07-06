@@ -20,7 +20,7 @@ export function discountPercent(price: number, compareAtPrice?: number | null): 
  */
 export function getProductHref(product: {
   slug: string
-  platform?: string | null
+  platform?: { slug?: string | null } | string | number | null
   category?: Array<{ slug?: string } | number> | null
 }): string {
   const cats = product.category ?? []
@@ -29,7 +29,8 @@ export function getProductHref(product: {
       return `/${c.slug}/products/${product.slug}`
     }
   }
-  return `/${product.platform ?? 'products'}/products/${product.slug}`
+  const platformSlug = typeof product.platform === 'object' ? product.platform?.slug : product.platform
+  return `/${platformSlug ?? 'products'}/products/${product.slug}`
 }
 
 export function slugify(value: string): string {

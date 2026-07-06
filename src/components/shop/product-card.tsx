@@ -55,16 +55,6 @@ const platformCfg: Record<string, {
     label: 'Nintendo Switch',
     labelCls: 'text-magenta-glow bg-magenta-glow/10',
   },
-  pc: {
-    bar: 'accent-pc',
-    accent: '#0891b2',
-    accentRgb: '8,145,178',
-    accentLight: 'rgba(8,145,178,0.06)',
-    priceCls: 'text-cyan-glow',
-    ctaBg: 'bg-cyan-glow hover:bg-cyan-glow/90',
-    label: 'PC',
-    labelCls: 'text-cyan-glow bg-cyan-glow/10',
-  },
   universal: {
     bar: 'accent-universal',
     accent: '#7c3aed',
@@ -115,8 +105,10 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
   const { has, toggle } = useWishlist()
   const wishlisted = has(product.id)
 
-  const platform = product.platform || 'universal'
+  const platformObj = typeof product.platform === 'object' ? product.platform : null
+  const platform = platformObj?.slug || 'universal'
   const c = platformCfg[platform] ?? platformCfg.universal
+  const platformLabel = platformObj?.name ?? c.label
 
   const quickAdd = (e: React.MouseEvent) => {
     e.preventDefault(); e.stopPropagation()
@@ -255,7 +247,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
               c.labelCls,
             )}>
               <span className="h-1.5 w-1.5 rounded-full bg-current opacity-75" />
-              {c.label}
+              {platformLabel}
             </span>
           </div>
 

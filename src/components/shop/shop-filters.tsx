@@ -6,15 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import { cn, formatPrice } from '@/lib/utils'
-import type { Brand, Category } from '@/payload-types'
-
-const PLATFORMS = [
-  { value: 'playstation', label: 'PlayStation' },
-  { value: 'xbox', label: 'Xbox' },
-  { value: 'switch', label: 'Nintendo Switch' },
-  { value: 'pc', label: 'PC' },
-  { value: 'universal', label: 'Universal' },
-]
+import type { Brand, Category, Platform } from '@/payload-types'
 
 const CONDITIONS = [
   { value: 'new', label: 'New' },
@@ -70,11 +62,13 @@ function PillToggle({
 export function ShopFilters({
   categories,
   brands,
+  platforms,
   className,
   onNavigate,
 }: {
   categories: Category[]
   brands: Brand[]
+  platforms: Platform[]
   className?: string
   onNavigate?: () => void
 }) {
@@ -148,9 +142,9 @@ export function ShopFilters({
 
       <FilterSection title="Platform">
         <div className="flex flex-col gap-1">
-          {PLATFORMS.map((p) => (
-            <PillToggle key={p.value} active={platform === p.value} onClick={() => toggle('platform', p.value, platform)}>
-              {p.label}
+          {platforms.map((p) => (
+            <PillToggle key={p.id} active={platform === p.slug} onClick={() => toggle('platform', p.slug, platform)}>
+              {p.name}
             </PillToggle>
           ))}
         </div>

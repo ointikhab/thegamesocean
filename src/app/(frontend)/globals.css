@@ -275,7 +275,6 @@
   .accent-ps        { background: linear-gradient(90deg, var(--color-violet-glow), #a855f7); }
   .accent-xbox      { background: linear-gradient(90deg, var(--color-emerald-glow), #10b981); }
   .accent-switch    { background: linear-gradient(90deg, var(--color-magenta-glow), #f472b6); }
-  .accent-pc        { background: linear-gradient(90deg, var(--color-cyan-glow), #22d3ee); }
   .accent-universal { background: linear-gradient(90deg, var(--color-violet-glow), var(--color-cyan-glow)); }
 
   /* === Pill tag === */

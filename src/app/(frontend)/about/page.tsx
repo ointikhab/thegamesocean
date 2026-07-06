@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 }
 
 const STATS = [
-  { icon: Gamepad2, label: 'Platforms supported', value: '4+' },
+  { icon: Gamepad2, label: 'Platforms supported', value: '3+' },
   { icon: Users, label: 'Happy gamers served', value: '50,000+' },
   { icon: MapPinned, label: 'Cities delivered to', value: '80+' },
   { icon: ShieldCheck, label: '100% authentic gear', value: 'Always' },

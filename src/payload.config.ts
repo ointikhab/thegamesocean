@@ -12,6 +12,7 @@ import { Customers } from './collections/Customers'
 import { Media } from './collections/Media'
 import { Orders } from './collections/Orders'
 import { Pages } from './collections/Pages'
+import { Platforms } from './collections/Platforms'
 import { Products } from './collections/Products'
 import { Reviews } from './collections/Reviews'
 import { SupportTickets } from './collections/SupportTickets'
@@ -34,7 +35,7 @@ export default buildConfig({
       titleSuffix: '— The Games Ocean Admin',
     },
   },
-  collections: [Users, Customers, Media, Brands, Categories, Products, Reviews, Orders, Banners, Pages, SupportTickets],
+  collections: [Users, Customers, Media, Brands, Platforms, Categories, Products, Reviews, Orders, Banners, Pages, SupportTickets],
   globals: [SiteSettings, Header, Footer, HomePage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

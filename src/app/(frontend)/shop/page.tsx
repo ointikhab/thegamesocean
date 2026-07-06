@@ -28,14 +28,6 @@ const SORT_MAP: Record<string, string> = {
   deals: '-compareAtPrice',
 }
 
-const PLATFORM_LABELS: Record<string, string> = {
-  playstation: 'PlayStation',
-  xbox: 'Xbox',
-  switch: 'Nintendo Switch',
-  pc: 'PC',
-  universal: 'Universal',
-}
-
 type SearchParams = Record<string, string | string[] | undefined>
 
 function first(value: string | string[] | undefined): string | undefined {
@@ -58,8 +50,17 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
   const page = Math.max(1, Number(first(params.page) || 1))
 
   const and: Where[] = [{ status: { not_equals: 'draft' } }]
-  if (platform) and.push({ platform: { equals: platform } })
-  if (condition) and.push({ condition: { equals: condition } })
+  if (platform) and.push({ 'platform.slug': { equals: platform } })
+  if (condition) {
+    // A product tagged "both" sells new AND used, so it should still surface
+    // under the New or Used filter pills — only the dedicated "Both" pill
+    // should match it exclusively.
+    and.push(
+      condition === 'both'
+        ? { condition: { equals: 'both' } }
+        : { condition: { in: [condition, 'both'] } },
+    )
+  }
   if (category) and.push({ 'category.slug': { equals: category } })
   if (brand) and.push({ 'brand.slug': { equals: brand } })
   if (q) and.push({ title: { like: q } })
@@ -71,14 +72,16 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
   const where: Where = and.length > 1 ? { and } : and[0]
   const sortValue = SORT_MAP[sort] ?? SORT_MAP.featured
 
-  const [productsRes, categoriesRes, brandsRes] = await Promise.all([
+  const [productsRes, categoriesRes, brandsRes, platformsRes] = await Promise.all([
     payload.find({ collection: 'products', where, sort: sortValue, limit: PAGE_SIZE, page, depth: 2 }),
     payload.find({ collection: 'categories', sort: 'navOrder', limit: 100 }),
     payload.find({ collection: 'brands', sort: 'name', limit: 100 }),
+    payload.find({ collection: 'platforms', sort: 'order', limit: 100 }),
   ])
 
   const activeCategory = category ? categoriesRes.docs.find((c) => c.slug === category) : null
   const activeBrand = brand ? brandsRes.docs.find((b) => b.slug === brand) : null
+  const activePlatform = platform ? platformsRes.docs.find((p) => p.slug === platform) : null
 
   let heading = 'Shop all gear'
   let eyebrow = 'The Games Ocean catalog'
@@ -87,12 +90,12 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
     eyebrow = 'Search'
   } else if (activeCategory) {
     heading = activeCategory.name
-    eyebrow = platform ? PLATFORM_LABELS[platform] : 'Category'
+    eyebrow = activePlatform ? activePlatform.name : 'Category'
   } else if (activeBrand) {
     heading = activeBrand.name
     eyebrow = 'Brand'
-  } else if (platform) {
-    heading = PLATFORM_LABELS[platform] ?? 'Shop'
+  } else if (activePlatform) {
+    heading = activePlatform.name
     eyebrow = 'Platform'
   } else if (sort === 'deals') {
     heading = 'Best deals right now'
@@ -133,12 +136,12 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[260px_1fr]">
           <aside className="hidden lg:block">
             <div className="glass-panel sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-2xl p-5">
-              <ShopFilters categories={categoriesRes.docs} brands={brandsRes.docs} />
+              <ShopFilters categories={categoriesRes.docs} brands={brandsRes.docs} platforms={platformsRes.docs} />
             </div>
           </aside>
 
           <div className="min-w-0">
-            <ShopToolbar totalDocs={productsRes.totalDocs} categories={categoriesRes.docs} brands={brandsRes.docs} />
+            <ShopToolbar totalDocs={productsRes.totalDocs} categories={categoriesRes.docs} brands={brandsRes.docs} platforms={platformsRes.docs} />
 
             {productsRes.docs.length > 0 ? (
               <>

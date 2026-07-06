@@ -10,6 +10,9 @@ import config from '@payload-config'
 async function run() {
   const payload = await getPayload({ config })
 
+  const platformsRes = await payload.find({ collection: 'platforms', limit: 100, overrideAccess: true })
+  const platformIdBySlug = new Map(platformsRes.docs.map((p) => [p.slug, p.id]))
+
   // ── Fetch the same product sets the old page.tsx used ────────────
   const [latest, playstation, xbox, switchGames, accessories] = await Promise.all([
     payload.find({
@@ -24,7 +27,7 @@ async function run() {
       collection: 'products',
       where: {
         and: [
-          { platform: { equals: 'playstation' } },
+          { 'platform.slug': { equals: 'playstation' } },
           { status: { not_equals: 'draft' } },
         ],
       },
@@ -37,7 +40,7 @@ async function run() {
       collection: 'products',
       where: {
         and: [
-          { platform: { equals: 'xbox' } },
+          { 'platform.slug': { equals: 'xbox' } },
           { status: { not_equals: 'draft' } },
         ],
       },
@@ -50,7 +53,7 @@ async function run() {
       collection: 'products',
       where: {
         and: [
-          { platform: { equals: 'switch' } },
+          { 'platform.slug': { equals: 'switch' } },
           { status: { not_equals: 'draft' } },
         ],
       },
@@ -130,7 +133,7 @@ async function run() {
             eyebrow: 'PS5 & PS4',
             description: 'DualSense haptics, console exclusives and next-gen hardware.',
             href: '/shop?platform=playstation',
-            platform: 'playstation',
+            platform: platformIdBySlug.get('playstation'),
             tag: 'Most Popular',
           },
           {
@@ -138,21 +141,14 @@ async function run() {
             eyebrow: 'Series X|S',
             description: 'Game Pass, Elite controllers and Xbox exclusives at speed.',
             href: '/shop?platform=xbox',
-            platform: 'xbox',
+            platform: platformIdBySlug.get('xbox'),
           },
           {
             label: 'Nintendo Switch',
             eyebrow: 'Switch & OLED',
             description: 'Joy-Cons, OLED model and every must-have Nintendo title.',
             href: '/shop?platform=switch',
-            platform: 'switch',
-          },
-          {
-            label: 'PC Gaming',
-            eyebrow: 'Peripherals',
-            description: 'Mechanical keyboards, precision mice, headsets and racing wheels.',
-            href: '/shop?platform=pc',
-            platform: 'pc',
+            platform: platformIdBySlug.get('switch'),
           },
         ],
       } as any,

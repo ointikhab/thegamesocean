@@ -1,4 +1,4 @@
-import { ArrowUpRight, Gamepad2, Joystick, Monitor, Sparkles } from 'lucide-react'
+import { ArrowUpRight, Gamepad2, Joystick, Sparkles } from 'lucide-react'
 import type { ElementType } from 'react'
 import Link from 'next/link'
 
@@ -64,16 +64,6 @@ const visualsByPlatform: Record<string, PlatformVisuals> = {
     shadow: 'hover:shadow-[0_16px_48px_rgba(219,39,119,0.12)]',
     tagCls: 'bg-magenta-glow text-white',
   },
-  pc: {
-    icon: Monitor,
-    bg: 'from-cyan-glow/8 to-cyan-glow/3',
-    accent: '#0891b2',
-    accentCls: 'text-cyan-glow',
-    bar: 'from-cyan-glow to-sky-400',
-    border: 'hover:border-cyan-glow/40',
-    shadow: 'hover:shadow-[0_16px_48px_rgba(8,145,178,0.12)]',
-    tagCls: 'bg-cyan-glow text-white',
-  },
   universal: {
     icon: Sparkles,
     bg: 'from-violet-glow/8 to-cyan-glow/3',
@@ -108,13 +98,6 @@ const DEFAULT_CARDS: PlatformCard[] = [
     description: 'Joy-Cons, OLED model and every must-have Nintendo title.',
     href: '/shop?platform=switch',
     platform: 'switch',
-  },
-  {
-    label: 'PC Gaming',
-    eyebrow: 'Peripherals',
-    description: 'Mechanical keyboards, precision mice, headsets and racing wheels.',
-    href: '/shop?platform=pc',
-    platform: 'pc',
   },
 ]
 

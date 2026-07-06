@@ -28,15 +28,9 @@ export const Categories: CollectionConfig = {
     },
     {
       name: 'platform',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'platforms',
       admin: { position: 'sidebar' },
-      options: [
-        { label: 'PlayStation', value: 'playstation' },
-        { label: 'Xbox', value: 'xbox' },
-        { label: 'Nintendo Switch', value: 'switch' },
-        { label: 'PC', value: 'pc' },
-        { label: 'Universal', value: 'universal' },
-      ],
     },
     {
       name: 'parent',

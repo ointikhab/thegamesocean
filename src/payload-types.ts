@@ -72,6 +72,7 @@ export interface Config {
     customers: Customer;
     media: Media;
     brands: Brand;
+    platforms: Platform;
     categories: Category;
     products: Product;
     reviews: Review;
@@ -90,6 +91,7 @@ export interface Config {
     customers: CustomersSelect<false> | CustomersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     brands: BrandsSelect<false> | BrandsSelect<true>;
+    platforms: PlatformsSelect<false> | PlatformsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
@@ -245,7 +247,7 @@ export interface Product {
   slug: string;
   status?: ('active' | 'sold-out' | 'coming-soon' | 'draft') | null;
   featured?: boolean | null;
-  platform?: ('playstation' | 'xbox' | 'switch' | 'pc' | 'universal') | null;
+  platform?: (number | null) | Platform;
   condition?: ('new' | 'used' | 'both') | null;
   category?: (number | Category)[] | null;
   brand?: (number | null) | Brand;
@@ -258,6 +260,14 @@ export interface Product {
    * Original price — shown struck-through when higher than price (sale badge)
    */
   compareAtPrice?: number | null;
+  /**
+   * Selling price for the used condition (this product also supports "New" via the price field above).
+   */
+  usedPrice?: number | null;
+  /**
+   * Original/struck-through price for the used condition.
+   */
+  usedCompareAtPrice?: number | null;
   stock?: number | null;
   /**
    * Average rating (seeded/derived from reviews)
@@ -312,6 +322,10 @@ export interface Product {
         label: string;
         sku?: string | null;
         /**
+         * Which condition this specific variant is — shown when the product supports both New & Used.
+         */
+        condition?: ('new' | 'used') | null;
+        /**
          * Selling price for this variant (leave blank to use base product price)
          */
         price?: number | null;
@@ -329,13 +343,29 @@ export interface Product {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "platforms".
+ */
+export interface Platform {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  /**
+   * Controls display order in filters and menus.
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
   id: number;
   name: string;
   slug: string;
-  platform?: ('playstation' | 'xbox' | 'switch' | 'pc' | 'universal') | null;
+  platform?: (number | null) | Platform;
   parent?: (number | null) | Category;
   image?: (number | null) | Media;
   description?: string | null;
@@ -569,6 +599,10 @@ export interface PayloadLockedDocument {
         value: number | Brand;
       } | null)
     | ({
+        relationTo: 'platforms';
+        value: number | Platform;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: number | Category;
       } | null)
@@ -780,6 +814,18 @@ export interface BrandsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "platforms_select".
+ */
+export interface PlatformsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
@@ -810,6 +856,8 @@ export interface ProductsSelect<T extends boolean = true> {
   sku?: T;
   price?: T;
   compareAtPrice?: T;
+  usedPrice?: T;
+  usedCompareAtPrice?: T;
   stock?: T;
   rating?: T;
   reviewCount?: T;
@@ -835,6 +883,7 @@ export interface ProductsSelect<T extends boolean = true> {
     | {
         label?: T;
         sku?: T;
+        condition?: T;
         price?: T;
         compareAtPrice?: T;
         stock?: T;
@@ -1135,7 +1184,7 @@ export interface HomePage {
           eyebrow?: string | null;
           description?: string | null;
           href: string;
-          platform: 'playstation' | 'xbox' | 'switch' | 'pc' | 'universal';
+          platform?: (number | null) | Platform;
           /**
            * Optional badge text, e.g. "Most Popular"
            */

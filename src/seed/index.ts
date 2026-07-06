@@ -10,6 +10,7 @@ import {
   categoriesData,
   customersData,
   pagesData,
+  platformsData,
   productsData,
   reviewsData,
   type SeedProduct,
@@ -102,6 +103,7 @@ async function clearAll(payload: Payload) {
     'banners',
     'pages',
     'categories',
+    'platforms',
     'brands',
     'customers',
     'users',
@@ -189,6 +191,20 @@ async function run() {
   }
 
   // ---------------------------------------------------------------------
+  // Platforms
+  // ---------------------------------------------------------------------
+  payload.logger.info('🕹️   Seeding platforms…')
+  const platformIdBySlug = new Map<string, string | number>()
+  for (const platform of platformsData) {
+    const doc = await payload.create({
+      collection: 'platforms',
+      data: { name: platform.name, slug: platform.slug, description: platform.description, order: platform.order },
+      overrideAccess: true,
+    })
+    platformIdBySlug.set(platform.slug, doc.id)
+  }
+
+  // ---------------------------------------------------------------------
   // Categories (two passes so `parent` self-relations resolve cleanly)
   // ---------------------------------------------------------------------
   payload.logger.info('🗂️   Seeding categories…')
@@ -199,7 +215,7 @@ async function run() {
       data: {
         name: cat.name,
         slug: cat.slug,
-        platform: cat.platform,
+        platform: platformIdBySlug.get(cat.platform) as number,
         description: cat.description,
         showInNav: cat.showInNav ?? true,
         navOrder: cat.navOrder ?? 0,
@@ -234,12 +250,15 @@ async function run() {
         slug: p.slug,
         status: p.status ?? 'active',
         featured: p.featured ?? false,
-        platform: p.platform,
+        platform: platformIdBySlug.get(p.platform) as number,
+        condition: p.condition ?? 'new',
         category: categoryIds as number[],
         brand: brandId as number,
         sku: p.sku,
         price: p.price,
         compareAtPrice: p.compareAtPrice,
+        usedPrice: p.usedPrice,
+        usedCompareAtPrice: p.usedCompareAtPrice,
         stock: p.stock,
         rating: p.rating,
         reviewCount: p.reviewCount,
@@ -269,6 +288,7 @@ async function run() {
                 return {
                   label: v.label,
                   sku: v.sku,
+                  condition: v.condition,
                   price: v.price,
                   compareAtPrice: v.compareAtPrice,
                   stock: v.stock,
@@ -544,7 +564,7 @@ async function run() {
     .filter(Boolean)
 
   const accessoryIds = productsData
-    .filter((p) => p.platform === 'pc' || p.platform === 'universal')
+    .filter((p) => p.platform === 'universal')
     .slice(0, 10)
     .map((p) => productIdBySlug.get(p.slug))
     .filter(Boolean)
@@ -610,7 +630,7 @@ async function run() {
             eyebrow: 'PS5 & PS4',
             description: 'DualSense haptics, console exclusives and next-gen hardware.',
             href: '/shop?platform=playstation',
-            platform: 'playstation',
+            platform: platformIdBySlug.get('playstation') as number,
             tag: 'Most Popular',
           },
           {
@@ -618,21 +638,14 @@ async function run() {
             eyebrow: 'Series X|S',
             description: 'Game Pass, Elite controllers and Xbox exclusives at speed.',
             href: '/shop?platform=xbox',
-            platform: 'xbox',
+            platform: platformIdBySlug.get('xbox') as number,
           },
           {
             label: 'Nintendo Switch',
             eyebrow: 'Switch & OLED',
             description: 'Joy-Cons, OLED model and every must-have Nintendo title.',
             href: '/shop?platform=switch',
-            platform: 'switch',
-          },
-          {
-            label: 'PC Gaming',
-            eyebrow: 'Peripherals',
-            description: 'Mechanical keyboards, precision mice, headsets and racing wheels.',
-            href: '/shop?platform=pc',
-            platform: 'pc',
+            platform: platformIdBySlug.get('switch') as number,
           },
         ],
       },
@@ -758,28 +771,6 @@ async function run() {
                 { label: 'Switch OLED Model', href: '/products/nintendo-switch-oled-model' },
                 { label: 'Zelda: Tears of the Kingdom', href: '/products/zelda-tears-of-the-kingdom' },
                 { label: 'Mario Kart 8 Deluxe', href: '/products/mario-kart-8-deluxe' },
-              ],
-            },
-          ],
-        },
-        {
-          label: 'PC Gaming',
-          href: '/shop?platform=pc',
-          columns: [
-            {
-              heading: 'Shop PC gear',
-              links: [
-                { label: 'Keyboards & Mice', href: '/shop?category=keyboards-mice' },
-                { label: 'Headsets', href: '/shop?category=headsets' },
-                { label: 'Racing Wheels', href: '/shop?category=racing-wheels' },
-              ],
-            },
-            {
-              heading: 'Featured',
-              links: [
-                { label: 'Logitech G Pro X Superlight 2', href: '/products/logitech-g-pro-x-superlight-2' },
-                { label: 'SteelSeries Apex Pro TKL', href: '/products/steelseries-apex-pro-tkl' },
-                { label: 'ASUS ROG Azoth', href: '/products/asus-rog-azoth-keyboard' },
               ],
             },
           ],

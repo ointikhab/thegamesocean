@@ -46,15 +46,9 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'platform',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'platforms',
       admin: { position: 'sidebar' },
-      options: [
-        { label: 'PlayStation', value: 'playstation' },
-        { label: 'Xbox', value: 'xbox' },
-        { label: 'Nintendo Switch', value: 'switch' },
-        { label: 'PC', value: 'pc' },
-        { label: 'Universal', value: 'universal' },
-      ],
     },
     {
       name: 'condition',
@@ -97,6 +91,24 @@ export const Products: CollectionConfig = {
       type: 'number',
       min: 0,
       admin: { description: 'Original price — shown struck-through when higher than price (sale badge)' },
+    },
+    {
+      name: 'usedPrice',
+      type: 'number',
+      min: 0,
+      admin: {
+        condition: (data) => data?.condition === 'both',
+        description: 'Selling price for the used condition (this product also supports "New" via the price field above).',
+      },
+    },
+    {
+      name: 'usedCompareAtPrice',
+      type: 'number',
+      min: 0,
+      admin: {
+        condition: (data) => data?.condition === 'both',
+        description: 'Original/struck-through price for the used condition.',
+      },
     },
     {
       name: 'stock',
@@ -172,6 +184,18 @@ export const Products: CollectionConfig = {
       fields: [
         { name: 'label', type: 'text', required: true },
         { name: 'sku', type: 'text' },
+        {
+          name: 'condition',
+          type: 'select',
+          options: [
+            { label: 'New', value: 'new' },
+            { label: 'Used', value: 'used' },
+          ],
+          admin: {
+            condition: (data) => data?.condition === 'both',
+            description: 'Which condition this specific variant is — shown when the product supports both New & Used.',
+          },
+        },
         {
           name: 'price',
           type: 'number',

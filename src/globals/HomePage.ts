@@ -136,15 +136,8 @@ export const HomePage: GlobalConfig = {
             { name: 'href', type: 'text', required: true },
             {
               name: 'platform',
-              type: 'select',
-              required: true,
-              options: [
-                { label: 'PlayStation', value: 'playstation' },
-                { label: 'Xbox', value: 'xbox' },
-                { label: 'Nintendo Switch', value: 'switch' },
-                { label: 'PC', value: 'pc' },
-                { label: 'Universal', value: 'universal' },
-              ],
+              type: 'relationship',
+              relationTo: 'platforms',
             },
             {
               name: 'tag',

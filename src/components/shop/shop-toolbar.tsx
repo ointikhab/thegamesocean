@@ -9,7 +9,7 @@ import { useState } from 'react'
 
 import { ShopFilters } from '@/components/shop/shop-filters'
 import { cn } from '@/lib/utils'
-import type { Brand, Category } from '@/payload-types'
+import type { Brand, Category, Platform } from '@/payload-types'
 
 const SORT_OPTIONS = [
   { value: 'featured', label: 'Featured' },
@@ -24,10 +24,12 @@ export function ShopToolbar({
   totalDocs,
   categories,
   brands,
+  platforms,
 }: {
   totalDocs: number
   categories: Category[]
   brands: Brand[]
+  platforms: Platform[]
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -93,7 +95,7 @@ export function ShopToolbar({
                         </button>
                       </Dialog.Close>
                     </div>
-                    <ShopFilters categories={categories} brands={brands} onNavigate={() => setMobileFiltersOpen(false)} />
+                    <ShopFilters categories={categories} brands={brands} platforms={platforms} onNavigate={() => setMobileFiltersOpen(false)} />
                   </motion.div>
                 </Dialog.Content>
               </Dialog.Portal>

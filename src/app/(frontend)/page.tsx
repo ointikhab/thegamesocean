@@ -54,7 +54,14 @@ export default async function HomePageRoute() {
     eyebrow: homePage.platformSection?.eyebrow,
     title: homePage.platformSection?.title,
     description: homePage.platformSection?.description,
-    cards: (homePage.platformSection?.cards ?? []) as PlatformCard[],
+    cards: (homePage.platformSection?.cards ?? []).map((c) => ({
+      label: c.label,
+      eyebrow: c.eyebrow,
+      description: c.description,
+      href: c.href,
+      platform: typeof c.platform === 'object' ? (c.platform?.slug ?? '') : '',
+      tag: c.tag,
+    })) as PlatformCard[],
   }
 
   const platformRails = (homePage.platformRails ?? []).map((r) => ({

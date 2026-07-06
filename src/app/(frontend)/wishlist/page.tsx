@@ -22,7 +22,7 @@ type WishlistProduct = {
   rating?: number | null
   reviewCount?: number | null
   status?: string | null
-  platform?: string | null
+  platform?: { slug?: string | null; name?: string | null } | number | null
   featured?: boolean | null
   category?: Array<{ slug?: string; name?: string } | number> | null
   brand?: { name: string } | number | null
@@ -34,21 +34,18 @@ const PLATFORM_COLOR: Record<string, string> = {
   playstation: 'text-violet-glow bg-violet-glow/10',
   xbox:        'text-emerald-glow bg-emerald-glow/10',
   switch:      'text-magenta-glow bg-magenta-glow/10',
-  pc:          'text-cyan-glow bg-cyan-glow/10',
   universal:   'text-violet-glow bg-violet-glow/10',
 }
 const PRICE_COLOR: Record<string, string> = {
   playstation: 'text-violet-glow',
   xbox:        'text-emerald-glow',
   switch:      'text-magenta-glow',
-  pc:          'text-cyan-glow',
   universal:   'text-violet-glow',
 }
 const BTN_COLOR: Record<string, string> = {
   playstation: 'bg-violet-glow hover:bg-violet-glow/90 shadow-[0_4px_14px_rgba(124,58,237,0.3)]',
   xbox:        'bg-emerald-glow hover:bg-emerald-glow/90 shadow-[0_4px_14px_rgba(5,150,105,0.3)]',
   switch:      'bg-magenta-glow hover:bg-magenta-glow/90 shadow-[0_4px_14px_rgba(219,39,119,0.3)]',
-  pc:          'bg-cyan-glow hover:bg-cyan-glow/90 shadow-[0_4px_14px_rgba(8,145,178,0.3)]',
   universal:   'bg-violet-glow hover:bg-violet-glow/90 shadow-[0_4px_14px_rgba(124,58,237,0.3)]',
 }
 
@@ -148,7 +145,8 @@ export default function WishlistPage() {
               const imgAlt = typeof imgEntry === 'object' && imgEntry?.alt ? imgEntry.alt : p.title
               const soldOut = p.status === 'sold-out'
               const href = getProductHref(p)
-              const platform = p.platform ?? 'universal'
+              const platformObj = typeof p.platform === 'object' ? p.platform : null
+              const platform = platformObj?.slug ?? 'universal'
               const discount = discountPercent(p.price, p.compareAtPrice)
               const priceCls = PRICE_COLOR[platform] ?? PRICE_COLOR.universal
               const btnCls = BTN_COLOR[platform] ?? BTN_COLOR.universal
@@ -192,10 +190,10 @@ export default function WishlistPage() {
                   <div className="flex flex-1 flex-col gap-3 p-5">
                     {/* Platform + brand */}
                     <div className="flex items-center justify-between gap-2">
-                      {p.platform && p.platform !== 'universal' && (
+                      {platformObj?.name && platform !== 'universal' && (
                         <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-display text-[9px] font-bold uppercase tracking-widest ${platCls}`}>
                           <span className="h-1 w-1 rounded-full bg-current" />
-                          {p.platform === 'switch' ? 'Nintendo Switch' : p.platform.charAt(0).toUpperCase() + p.platform.slice(1)}
+                          {platformObj.name}
                         </span>
                       )}
                       {p.brand && typeof p.brand === 'object' && (

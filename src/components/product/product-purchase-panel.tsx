@@ -63,7 +63,6 @@ const PLATFORM_ACCENT: Record<string, string> = {
   playstation: 'text-violet-glow',
   xbox:        'text-emerald-glow',
   switch:      'text-magenta-glow',
-  pc:          'text-cyan-glow',
   universal:   'text-violet-glow',
 }
 
@@ -71,7 +70,6 @@ const PLATFORM_BTN: Record<string, string> = {
   playstation: 'bg-violet-glow hover:bg-violet-glow/90 shadow-[0_4px_20px_rgba(124,58,237,0.35)] hover:shadow-[0_6px_28px_rgba(124,58,237,0.5)]',
   xbox:        'bg-emerald-glow hover:bg-emerald-glow/90 shadow-[0_4px_20px_rgba(5,150,105,0.35)]',
   switch:      'bg-magenta-glow hover:bg-magenta-glow/90 shadow-[0_4px_20px_rgba(219,39,119,0.35)]',
-  pc:          'bg-cyan-glow hover:bg-cyan-glow/90 shadow-[0_4px_20px_rgba(8,145,178,0.35)]',
   universal:   'bg-violet-glow hover:bg-violet-glow/90 shadow-[0_4px_20px_rgba(124,58,237,0.35)]',
 }
 
@@ -79,7 +77,6 @@ const PLATFORM_RING: Record<string, string> = {
   playstation: 'ring-violet-glow/50 border-violet-glow/60 bg-violet-glow/8',
   xbox:        'ring-emerald-glow/50 border-emerald-glow/60 bg-emerald-glow/8',
   switch:      'ring-magenta-glow/50 border-magenta-glow/60 bg-magenta-glow/8',
-  pc:          'ring-cyan-glow/50 border-cyan-glow/60 bg-cyan-glow/8',
   universal:   'ring-violet-glow/50 border-violet-glow/60 bg-violet-glow/8',
 }
 
@@ -105,8 +102,14 @@ export function ProductPurchasePanel({
   const variants = product.variants ?? []
   const [variantIdx, setVariantIdx] = useState(variants.length > 0 ? 0 : -1)
   const [quantity, setQuantity] = useState(1)
+  const [selectedCondition, setSelectedCondition] = useState<'new' | 'used'>('new')
 
   const activeVariant = variantIdx >= 0 ? variants[variantIdx] : null
+
+  // A standalone New/Used toggle only makes sense when there's no variant to
+  // carry its own condition tag — once variants exist, each one is tagged individually.
+  const showConditionToggle = product.condition === 'both' && variants.length === 0
+  const effectiveCondition: 'new' | 'used' = activeVariant?.condition ?? (showConditionToggle ? selectedCondition : 'new')
 
   const selectVariant = (i: number) => {
     setVariantIdx(i)
@@ -122,16 +125,20 @@ export function ProductPurchasePanel({
     }
   }
 
-  // price = variant price if set, else product base price
-  const price         = activeVariant?.price         ?? product.price
-  const compareAt     = activeVariant?.compareAtPrice ?? product.compareAtPrice
+  // price = variant price if set, else the base price for whichever condition is in effect
+  const price =
+    activeVariant?.price ??
+    (effectiveCondition === 'used' ? (product.usedPrice ?? product.price) : product.price)
+  const compareAt =
+    activeVariant?.compareAtPrice ??
+    (effectiveCondition === 'used' ? product.usedCompareAtPrice : product.compareAtPrice)
   const discount      = discountPercent(price, compareAt)
   const stock         = activeVariant ? (activeVariant.stock ?? 0) : (product.stock ?? 0)
   const soldOut       = product.status === 'sold-out' || stock <= 0
   const lowStock      = !soldOut && stock > 0 && stock <= 5
   const wishlisted    = has(product.id)
 
-  const platform  = product.platform ?? 'universal'
+  const platform  = (typeof product.platform === 'object' ? product.platform?.slug : null) ?? 'universal'
   const accentCls = PLATFORM_ACCENT[platform] ?? PLATFORM_ACCENT.universal
   const btnCls    = PLATFORM_BTN[platform]    ?? PLATFORM_BTN.universal
   const ringCls   = PLATFORM_RING[platform]   ?? PLATFORM_RING.universal
@@ -146,6 +153,12 @@ export function ProductPurchasePanel({
     return fallbackImage
   }, [activeVariant, fallbackImage])
 
+  // disambiguate which condition was bought when it isn't obvious from the variant itself
+  const conditionSuffix = showConditionToggle ? ` (${selectedCondition === 'used' ? 'Used' : 'New'})` : ''
+  const cartLineLabel = activeVariant
+    ? `${activeVariant.label}${activeVariant.condition ? ` (${activeVariant.condition === 'used' ? 'Used' : 'New'})` : ''}`
+    : (conditionSuffix ? conditionSuffix.trim().replace(/[()]/g, '') : undefined)
+
   const buildCartItem = () => ({
     productId: product.id,
     slug: product.slug,
@@ -153,7 +166,7 @@ export function ProductPurchasePanel({
     image: variantImage,
     price,
     compareAtPrice: compareAt ?? undefined,
-    variantLabel: activeVariant?.label,
+    variantLabel: cartLineLabel,
     quantity,
     maxQuantity: stock > 0 ? stock : 10,
   })
@@ -163,7 +176,7 @@ export function ProductPurchasePanel({
     addItem(buildCartItem())
     show({
       title: 'Added to cart',
-      description: `${product.title}${activeVariant ? ` — ${activeVariant.label}` : ''}`,
+      description: `${product.title}${cartLineLabel ? ` — ${cartLineLabel}` : ''}`,
       variant: 'success',
     })
   }
@@ -241,9 +254,39 @@ export function ProductPurchasePanel({
             <Badge variant="success">In stock &amp; ready to ship</Badge>
           )}
           {product.condition === 'used' && <Badge variant="warning">Used</Badge>}
-          {product.condition === 'both' && <Badge variant="outline">New &amp; Used</Badge>}
+          {product.condition === 'both' && !activeVariant && (
+            <Badge variant={effectiveCondition === 'used' ? 'warning' : 'outline'}>
+              {effectiveCondition === 'used' ? 'Used' : 'New'}
+            </Badge>
+          )}
         </div>
       </div>
+
+      {/* ── New / Used toggle (single-SKU products that sell both) ── */}
+      {showConditionToggle && (
+        <div>
+          <p className="mb-3 font-display text-[11px] font-bold uppercase tracking-[0.22em] text-ink-500">
+            Condition
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {(['new', 'used'] as const).map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setSelectedCondition(c)}
+                className={cn(
+                  'rounded-xl border px-4 py-2.5 font-display text-sm font-semibold capitalize transition-all duration-200',
+                  selectedCondition === c
+                    ? `border-transparent ${ringCls} ring-1 text-ink-900`
+                    : 'border-surface-300 bg-white text-ink-600 hover:border-surface-400 hover:text-ink-900',
+                )}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Short description ── */}
       {product.shortDescription && (
@@ -278,6 +321,11 @@ export function ProductPurchasePanel({
                   className="text-sm font-semibold text-ink-700"
                 >
                   {activeVariant.label}
+                  {activeVariant.condition && (
+                    <span className={cn('ml-1.5 font-normal', activeVariant.condition === 'used' ? 'text-amber-600' : 'text-emerald-glow')}>
+                      · {activeVariant.condition === 'used' ? 'Used' : 'New'}
+                    </span>
+                  )}
                 </motion.p>
               </AnimatePresence>
             )}
@@ -290,53 +338,66 @@ export function ProductPurchasePanel({
                 const swatchColor = getSwatchColor(v.label) ?? '#999'
                 const isSelected = i === variantIdx
                 const isOut = (v.stock ?? 0) <= 0
+                const conditionTag = v.condition ? ` — ${v.condition === 'used' ? 'Used' : 'New'}` : ''
                 return (
-                  <button
-                    key={v.id ?? i}
-                    type="button"
-                    disabled={isOut}
-                    title={`${v.label}${v.price && v.price !== product.price ? ` — ${formatPrice(v.price)}` : ''}`}
-                    onClick={() => selectVariant(i)}
-                    className={cn(
-                      'group relative h-10 w-10 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2',
-                      isSelected
-                        ? `ring-2 ring-offset-2 ${ringCls} scale-110`
-                        : 'ring-1 ring-surface-300 hover:ring-surface-400 hover:scale-110',
-                      isOut && 'cursor-not-allowed opacity-40',
-                    )}
-                    style={{ backgroundColor: swatchColor }}
-                  >
-                    {/* sold-out diagonal slash */}
-                    {isOut && (
-                      <span className="absolute inset-0 flex items-center justify-center rounded-full">
-                        <span className="block h-[1.5px] w-8 rotate-45 bg-white/70" />
+                  <div key={v.id ?? i} className="flex flex-col items-center gap-1.5">
+                    <button
+                      type="button"
+                      disabled={isOut}
+                      title={`${v.label}${conditionTag}${v.price && v.price !== product.price ? ` — ${formatPrice(v.price)}` : ''}`}
+                      onClick={() => selectVariant(i)}
+                      className={cn(
+                        'group relative h-10 w-10 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2',
+                        isSelected
+                          ? `ring-2 ring-offset-2 ${ringCls} scale-110`
+                          : 'ring-1 ring-surface-300 hover:ring-surface-400 hover:scale-110',
+                        isOut && 'cursor-not-allowed opacity-40',
+                      )}
+                      style={{ backgroundColor: swatchColor }}
+                    >
+                      {/* sold-out diagonal slash */}
+                      {isOut && (
+                        <span className="absolute inset-0 flex items-center justify-center rounded-full">
+                          <span className="block h-[1.5px] w-8 rotate-45 bg-white/70" />
+                        </span>
+                      )}
+                      {/* selected checkmark */}
+                      {isSelected && !isOut && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute inset-0 flex items-center justify-center"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path d="M2.5 7L5.5 10L11.5 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </motion.span>
+                      )}
+                      {/* white swatch needs a dark check */}
+                      {isSelected && !isOut && swatchColor.startsWith('#f') && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute inset-0 flex items-center justify-center"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path d="M2.5 7L5.5 10L11.5 4" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </motion.span>
+                      )}
+                    </button>
+                    {/* condition label — only shown when the product sells both new & used */}
+                    {v.condition && (
+                      <span
+                        className={cn(
+                          'font-display text-[9px] font-bold uppercase tracking-wide',
+                          v.condition === 'used' ? 'text-amber-600' : 'text-emerald-glow',
+                        )}
+                      >
+                        {v.condition === 'used' ? 'Used' : 'New'}
                       </span>
                     )}
-                    {/* selected checkmark */}
-                    {isSelected && !isOut && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="absolute inset-0 flex items-center justify-center"
-                      >
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                          <path d="M2.5 7L5.5 10L11.5 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </motion.span>
-                    )}
-                    {/* white swatch needs a dark check */}
-                    {isSelected && !isOut && swatchColor.startsWith('#f') && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="absolute inset-0 flex items-center justify-center"
-                      >
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                          <path d="M2.5 7L5.5 10L11.5 4" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </motion.span>
-                    )}
-                  </button>
+                  </div>
                 )
               })}
             </div>
@@ -346,7 +407,8 @@ export function ProductPurchasePanel({
               {variants.map((v, i) => {
                 const isSelected = i === variantIdx
                 const isOut = (v.stock ?? 0) <= 0
-                const variantPrice = v.price ?? product.price
+                const variantBasePrice = v.condition === 'used' ? (product.usedPrice ?? product.price) : product.price
+                const variantPrice = v.price ?? variantBasePrice
                 return (
                   <button
                     key={v.id ?? i}
@@ -362,6 +424,16 @@ export function ProductPurchasePanel({
                     )}
                   >
                     {v.label}
+                    {v.condition && (
+                      <span
+                        className={cn(
+                          'ml-1.5 rounded px-1 py-0.5 align-middle text-[9px] font-bold uppercase tracking-wide',
+                          v.condition === 'used' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-glow/10 text-emerald-glow',
+                        )}
+                      >
+                        {v.condition}
+                      </span>
+                    )}
                     {variantPrice !== product.price && (
                       <span className={cn('ml-2 text-xs font-medium', isSelected ? accentCls : 'text-ink-400')}>
                         {formatPrice(variantPrice)}
