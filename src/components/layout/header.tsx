@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import { Logo } from '@/components/layout/logo'
+import { SearchSuggestions } from '@/components/layout/search-suggestions'
 import { cn } from '@/lib/utils'
 import type { Header as HeaderGlobal, Media, SiteSetting } from '@/payload-types'
 import { useAuth } from '@/providers/auth-provider'
@@ -54,7 +55,7 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
     e.preventDefault()
     if (!query.trim()) return
     setSearchOpen(false)
-    router.push(`/search?q=${encodeURIComponent(query.trim())}`)
+    router.push(`/shop?q=${encodeURIComponent(query.trim())}`)
   }
 
   return (
@@ -257,9 +258,14 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
                 </button>
               </Dialog.Close>
             </form>
-            <p className="mt-2.5 text-center font-display text-[10px] font-bold uppercase tracking-[0.3em] text-ink-400">
-              Press Enter to search
-            </p>
+
+            <SearchSuggestions query={query} onNavigate={() => setSearchOpen(false)} />
+
+            {query.trim().length < 2 && (
+              <p className="mt-2.5 text-center font-display text-[10px] font-bold uppercase tracking-[0.3em] text-ink-400">
+                Press Enter to search
+              </p>
+            )}
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
