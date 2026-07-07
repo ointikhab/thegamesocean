@@ -5,7 +5,9 @@ import { getPayloadClient } from '@/lib/payload'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
-export const revalidate = 3600
+// Must render at request time, not build time — Payload/Postgres isn't reachable
+// during the Railway image build step, so static generation here fails the build.
+export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payload = await getPayloadClient()
