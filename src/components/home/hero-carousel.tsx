@@ -121,7 +121,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
   if (banners.length === 0) return null
 
   const banner = banners[active]
-  const image = resolveImage(typeof banner.image === 'object' ? banner.image : null, 'large')
+  const image = resolveImage(typeof banner.image === 'object' ? banner.image : null, 'hero')
   const theme = themeConfig[banner.theme || 'violet'] ?? themeConfig.violet
 
   return (

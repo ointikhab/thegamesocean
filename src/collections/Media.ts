@@ -29,6 +29,9 @@ export const Media: CollectionConfig = {
       { name: 'thumbnail', width: 400, height: 400, position: 'centre' },
       { name: 'card', width: 640, height: 640, position: 'centre' },
       { name: 'large', width: 1600, height: 1600, position: 'centre', withoutEnlargement: true },
+      // Wide landscape crop for the homepage hero carousel — square sizes above would
+      // otherwise get double-cropped (once into a square, again to fit the wide banner).
+      { name: 'hero', width: 2400, height: 1200, position: 'centre', withoutEnlargement: true },
     ],
     mimeTypes: ['image/*'],
   },

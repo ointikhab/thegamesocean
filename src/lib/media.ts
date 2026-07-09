@@ -1,6 +1,6 @@
 import type { Media } from '@/payload-types'
 
-type Size = 'thumbnail' | 'card' | 'large'
+type Size = 'thumbnail' | 'card' | 'large' | 'hero'
 
 /** Resolves a Payload upload relation (which may be an id, populated doc, or null) to a usable image. */
 export function resolveImage(
