@@ -7,6 +7,7 @@ import { CartDrawer } from '@/components/layout/cart-drawer'
 import { ChatWidget } from '@/components/layout/chat-widget'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
+import { WhatsAppButton } from '@/components/layout/whatsapp-button'
 import { getPayloadClient } from '@/lib/payload'
 import { Providers } from '@/providers'
 
@@ -51,6 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
           <CartDrawer />
           <ChatWidget />
+          <WhatsAppButton />
         </Providers>
       </body>
     </html>
