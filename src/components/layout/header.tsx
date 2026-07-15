@@ -89,6 +89,12 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
               {navItems.map((item) => (
                 <NavMenuItem key={item.id ?? item.label} item={item} />
               ))}
+              <Link
+                href="/repair-service"
+                className="rounded-xl px-4 py-2 font-display text-sm font-semibold text-ink-700 transition-all hover:bg-surface-100 hover:text-ink-900"
+              >
+                Repair Service
+              </Link>
             </nav>
           </div>
 
@@ -296,6 +302,13 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
               {navItems.map((item) => (
                 <MobileNavItem key={item.id ?? item.label} item={item} onNavigate={() => setMobileOpen(false)} />
               ))}
+              <Link
+                href="/repair-service"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-xl px-3 py-3 font-display text-sm font-semibold text-ink-900 transition-colors hover:bg-surface-100"
+              >
+                Repair Service
+              </Link>
             </nav>
 
             <div className="mt-auto flex flex-col gap-2 border-t border-surface-200 pt-6">
