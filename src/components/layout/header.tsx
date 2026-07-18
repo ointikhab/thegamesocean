@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import { Logo } from '@/components/layout/logo'
+import { type NavItem, PrimaryNav } from '@/components/layout/primary-nav'
 import { SearchSuggestions } from '@/components/layout/search-suggestions'
 import { cn } from '@/lib/utils'
 import type { Header as HeaderGlobal, Media, SiteSetting } from '@/payload-types'
@@ -42,6 +43,8 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
   }, [])
 
   const navItems = header?.navItems ?? []
+  const repairServiceItem: NavItem = { id: 'repair-service', label: 'Repair Service', href: '/repair-service', columns: [] }
+  const allNavItems: NavItem[] = [...navItems, repairServiceItem]
   const logoSrc = (() => {
     const url =
       siteSettings?.logo && typeof siteSettings.logo === 'object'
@@ -83,23 +86,15 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
       >
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           {/* Left: Logo + Nav */}
-          <div className="flex items-center gap-8">
+          <div className="flex min-w-0 flex-1 items-center gap-4 xl:gap-6">
             <Logo label={siteSettings?.storeName || 'THE GAMES OCEAN'} src={logoSrc} />
-            <nav className="hidden items-center gap-0.5 lg:flex">
-              {navItems.map((item) => (
-                <NavMenuItem key={item.id ?? item.label} item={item} />
-              ))}
-              <Link
-                href="/repair-service"
-                className="rounded-xl px-4 py-2 font-display text-sm font-semibold text-ink-700 transition-all hover:bg-surface-100 hover:text-ink-900"
-              >
-                Repair Service
-              </Link>
-            </nav>
+            <div className="hidden min-w-0 flex-1 lg:flex">
+              <PrimaryNav items={allNavItems} />
+            </div>
           </div>
 
           {/* Right: Actions */}
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
@@ -339,72 +334,6 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
         </Dialog.Portal>
       </Dialog.Root>
     </header>
-  )
-}
-
-type NavItem = NonNullable<HeaderGlobal['navItems']>[number]
-
-function NavMenuItem({ item }: { item: NavItem }) {
-  const [open, setOpen] = useState(false)
-  const hasMega = item.columns && item.columns.length > 0
-
-  if (!hasMega) {
-    return (
-      <Link
-        href={item.href}
-        className="rounded-xl px-4 py-2 font-display text-sm font-semibold text-ink-700 transition-all hover:bg-surface-100 hover:text-ink-900"
-      >
-        {item.label}
-      </Link>
-    )
-  }
-
-  return (
-    <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-      <Link
-        href={item.href}
-        className="flex items-center gap-1 rounded-xl px-4 py-2 font-display text-sm font-semibold text-ink-700 transition-all hover:bg-surface-100 hover:text-ink-900"
-      >
-        {item.label}
-        <ChevronDown size={13} className={cn('transition-transform duration-300', open && 'rotate-180')} />
-      </Link>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.97 }}
-            transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute left-1/2 top-full z-40 w-[min(720px,calc(100vw-3rem))] -translate-x-1/2 pt-3"
-          >
-            <div className="grid grid-cols-2 gap-x-8 gap-y-6 rounded-2xl bg-white border border-surface-300 shadow-[0_16px_48px_rgba(0,0,0,0.12)] p-7 sm:grid-cols-3">
-              {/* Top accent */}
-              <div className="col-span-full -mt-7 mb-1 h-[3px] bg-gradient-to-r from-violet-glow via-cyan-glow to-transparent rounded-t-2xl" />
-              {item.columns!.map((col) => (
-                <div key={col.id ?? col.heading}>
-                  <p className="mb-3 font-display text-[10px] font-bold uppercase tracking-[0.28em] text-violet-glow">
-                    {col.heading}
-                  </p>
-                  <ul className="flex flex-col gap-2">
-                    {(col.links ?? []).map((link) => (
-                      <li key={link.id ?? link.label}>
-                        <Link
-                          href={link.href}
-                          className="group flex items-center gap-1.5 text-sm text-ink-500 transition-colors hover:text-ink-900"
-                        >
-                          <span className="h-px w-0 bg-violet-glow transition-all duration-300 group-hover:w-3" />
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
   )
 }
 
