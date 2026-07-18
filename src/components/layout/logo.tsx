@@ -14,7 +14,7 @@ export function Logo({
   src?: string | null
 }) {
   return (
-    <Link href="/" className={cn('group inline-flex shrink-0 items-center gap-2.5', className)}>
+    <Link href="/" className={cn('group inline-flex min-w-0 items-center gap-2.5', className)}>
       <span className="relative flex h-13 w-13 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105">
         <Image
           src={src || FALLBACK_LOGO}
@@ -25,7 +25,7 @@ export function Logo({
           priority
         />
       </span>
-      <span className="whitespace-nowrap font-display text-2xl font-bold tracking-[0.12em] text-ink-900">
+      <span className="truncate font-display text-base font-bold tracking-[0.1em] text-ink-900 sm:text-2xl sm:tracking-[0.12em]">
         {label}
       </span>
     </Link>

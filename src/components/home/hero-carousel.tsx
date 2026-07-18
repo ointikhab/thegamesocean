@@ -180,7 +180,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         <div className="pointer-events-none absolute bottom-5 right-5 h-7 w-7 border-b-2 border-r-2 border-white/10 rounded-br-sm" />
 
         {/* ── Slide content ──────────────────────────────────────────── */}
-        <div className="relative z-10 flex h-full flex-col justify-end gap-5 p-8 sm:p-12 lg:max-w-[52rem] lg:justify-center lg:p-16">
+        <div className="relative z-10 flex h-full flex-col justify-end gap-5 p-8 pb-28 sm:p-12 lg:max-w-[52rem] lg:justify-center lg:p-16">
           <AnimatePresence mode="wait">
             <motion.div
               key={banner.id}

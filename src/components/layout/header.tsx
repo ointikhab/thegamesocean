@@ -67,10 +67,10 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
       {siteSettings?.announcementText && (
         <div className="relative overflow-hidden bg-violet-glow py-2 px-4 text-center">
           <div className="bg-grid-full pointer-events-none absolute inset-0 opacity-20" />
-          <span className="relative z-10 inline-flex items-center gap-2 font-display text-[11px] font-bold uppercase tracking-[0.2em] text-white">
-            <Zap size={10} />
-            {siteSettings.announcementText}
-            <Zap size={10} />
+          <span className="relative z-10 flex flex-wrap items-center justify-center gap-2 font-display text-[10px] font-bold uppercase tracking-[0.12em] text-white sm:text-[11px] sm:tracking-[0.2em]">
+            <Zap size={10} className="shrink-0" />
+            <span>{siteSettings.announcementText}</span>
+            <Zap size={10} className="shrink-0" />
           </span>
         </div>
       )}
@@ -85,8 +85,15 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
         )}
       >
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          {/* Left: Logo + Nav */}
+          {/* Left: Hamburger (mobile) + Logo + Nav */}
           <div className="flex min-w-0 flex-1 items-center gap-4 xl:gap-6">
+            <button
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-ink-500 transition-all hover:bg-surface-200 hover:text-ink-900 lg:hidden"
+            >
+              <Menu size={19} />
+            </button>
             <Logo label={siteSettings?.storeName || 'THE GAMES OCEAN'} src={logoSrc} />
             <div className="hidden min-w-0 flex-1 lg:flex">
               <PrimaryNav items={allNavItems} />
@@ -223,14 +230,6 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
                 </span>
               )}
             </motion.button>
-
-            <button
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open menu"
-              className="flex h-9 w-9 items-center justify-center rounded-xl text-ink-500 transition-all hover:bg-surface-200 hover:text-ink-900 lg:hidden"
-            >
-              <Menu size={19} />
-            </button>
           </div>
         </div>
       </div>
@@ -275,7 +274,7 @@ export function Header({ siteSettings, header }: { siteSettings: SiteSetting; he
       <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-[70] bg-ink-900/25 backdrop-blur-sm" />
-          <Dialog.Content className="fixed inset-y-0 right-0 z-[71] flex h-full w-[88vw] max-w-sm flex-col overflow-y-auto bg-white border-l border-surface-300 p-6 shadow-[0_0_60px_rgba(0,0,0,0.12)] outline-none">
+          <Dialog.Content className="fixed inset-y-0 left-0 z-[71] flex h-full w-[88vw] max-w-sm flex-col overflow-y-auto bg-white border-r border-surface-300 p-6 shadow-[0_0_60px_rgba(0,0,0,0.12)] outline-none">
             <Dialog.Title className="sr-only">Menu</Dialog.Title>
 
             {/* Top accent */}

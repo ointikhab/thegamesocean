@@ -18,7 +18,7 @@ export function WhatsAppButton() {
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.93 }}
       aria-label="Chat with us on WhatsApp"
-      className="fixed bottom-6 right-24 z-50 flex h-[58px] w-[58px] items-center justify-center rounded-2xl text-white"
+      className="fixed bottom-24 right-6 z-50 flex h-[58px] w-[58px] items-center justify-center rounded-2xl text-white sm:bottom-6 sm:right-24"
       style={{
         background: 'linear-gradient(135deg, #25D366, #128C7E)',
         boxShadow: '0 4px 24px rgba(37,211,102,0.55)',
