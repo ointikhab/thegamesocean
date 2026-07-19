@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer'
 
+import { PAYMENT_METHOD_LABELS, type PaymentMethodValue } from '@/lib/payment-methods'
+
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: Number(process.env.SMTP_PORT) || 587,
@@ -41,10 +43,13 @@ export async function sendEmail({
 export function orderAdminEmailHtml(order: {
   orderNumber: string
   total: number
+  paymentMethod?: PaymentMethodValue
   shippingAddress: { fullName: string; phone: string; email?: string; line1: string; city: string; province?: string }
   items: { titleSnapshot: string; quantity: number; unitPrice: number; lineTotal: number; variantLabel?: string }[]
   notes?: string
 }) {
+  const paymentLabel = PAYMENT_METHOD_LABELS[order.paymentMethod ?? 'cod'] ?? 'Cash on Delivery'
+  const isTransfer = order.paymentMethod === 'easypaisa' || order.paymentMethod === 'meezan_bank'
   const rows = order.items
     .map(
       (i) => `
@@ -88,8 +93,9 @@ export function orderAdminEmailHtml(order: {
 
       <div style="margin-top:20px;text-align:right;">
         <p style="font-size:20px;font-weight:700;color:#7c3aed;margin:0;">Rs.${order.total.toLocaleString()}</p>
-        <p style="font-size:12px;color:#666;margin:4px 0 0;">Cash on Delivery</p>
+        <p style="font-size:12px;color:#666;margin:4px 0 0;">${paymentLabel}</p>
       </div>
+      ${isTransfer ? `<p style="margin-top:16px;padding:12px 14px;background:#2a1f0d;border-left:3px solid #f5a623;border-radius:8px;font-size:13px;color:#f5c164;">Awaiting payment confirmation — customer was asked to WhatsApp the transfer screenshot along with order ID ${order.orderNumber} to our payment number.</p>` : ''}
     </div>
     <div style="padding:16px 32px;background:#0d0d14;font-size:12px;color:#555;text-align:center;">
       The Games Ocean Admin · <a href="${process.env.NEXT_PUBLIC_SERVER_URL}/admin/collections/orders" style="color:#7c3aed;">View in Admin Panel</a>

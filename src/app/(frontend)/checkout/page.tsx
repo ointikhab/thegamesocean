@@ -8,9 +8,24 @@ import { useState } from 'react'
 
 import { Reveal } from '@/components/ui/reveal'
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/lib/constants'
+import {
+  EASYPAISA_NUMBER,
+  MEEZAN_ACCOUNT_NUMBER,
+  MEEZAN_ACCOUNT_TITLE,
+  MEEZAN_IBAN,
+  PAYMENT_WHATSAPP_DISPLAY,
+  type PaymentMethodValue,
+  paymentWhatsAppLink,
+} from '@/lib/payment-methods'
 import { cn, formatPrice } from '@/lib/utils'
 import { useCart } from '@/providers/cart-provider'
 import { useToast } from '@/providers/toast-provider'
+
+const PAYMENT_OPTIONS: { value: PaymentMethodValue; title: string; desc: string }[] = [
+  { value: 'cod', title: 'Cash on Delivery (COD)', desc: 'Pay when your order arrives at your door.' },
+  { value: 'easypaisa', title: 'EasyPaisa', desc: 'Transfer to our EasyPaisa account, then confirm via WhatsApp.' },
+  { value: 'meezan_bank', title: 'Meezan Bank Transfer', desc: 'Bank transfer to our Meezan Bank account.' },
+]
 
 type FormData = {
   firstName: string
@@ -46,8 +61,11 @@ export default function CheckoutPage() {
     address: '', city: '', province: '', postalCode: '', notes: '',
   })
   const [errors, setErrors] = useState<Partial<FormData>>({})
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodValue>('cod')
   const [placing, setPlacing] = useState(false)
   const [placed, setPlaced] = useState(false)
+  const [placedOrderNumber, setPlacedOrderNumber] = useState('')
+  const [placedTotal, setPlacedTotal] = useState(0)
 
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD || items.length === 0 ? 0 : SHIPPING_FEE
   const total = subtotal + shipping
@@ -78,7 +96,7 @@ export default function CheckoutPage() {
     const payload = {
       orderNumber,
       status: 'pending',
-      paymentMethod: 'cod',
+      paymentMethod,
       items: items.map((item) => ({
         product: item.productId,
         titleSnapshot: item.title,
@@ -116,9 +134,18 @@ export default function CheckoutPage() {
         throw new Error(err?.message ?? `HTTP ${res.status}`)
       }
 
+      setPlacedOrderNumber(orderNumber)
+      setPlacedTotal(total)
       clearCart()
       setPlaced(true)
-      show({ title: 'Order placed!', description: "We'll contact you to confirm your COD delivery.", variant: 'success' })
+      show({
+        title: 'Order placed!',
+        description:
+          paymentMethod === 'cod'
+            ? "We'll contact you to confirm your COD delivery."
+            : 'Please complete your transfer and send us the screenshot on WhatsApp.',
+        variant: 'success',
+      })
     } catch (err) {
       show({ title: 'Something went wrong', description: String(err), variant: 'info' })
     } finally {
@@ -144,6 +171,7 @@ export default function CheckoutPage() {
   }
 
   if (placed) {
+    const isTransfer = paymentMethod === 'easypaisa' || paymentMethod === 'meezan_bank'
     return (
       <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-center px-4 py-28 text-center sm:px-6 lg:px-8">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', duration: 0.6 }}>
@@ -153,10 +181,58 @@ export default function CheckoutPage() {
           <h1 className="mt-6 font-display text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
             Order confirmed!
           </h1>
-          <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-ink-500">
-            Thank you, <strong className="text-ink-800">{form.firstName}</strong>! Your order will be delivered to{' '}
-            <strong className="text-ink-800">{form.city}</strong> via Cash on Delivery. We'll call to confirm.
+          <p className="mt-3 font-display text-sm font-bold uppercase tracking-wider text-violet-glow">
+            Order ID: {placedOrderNumber}
           </p>
+          <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-ink-500">
+            {paymentMethod === 'cod' ? (
+              <>
+                Thank you, <strong className="text-ink-800">{form.firstName}</strong>! Your order will be delivered to{' '}
+                <strong className="text-ink-800">{form.city}</strong> via Cash on Delivery. We'll call to confirm.
+              </>
+            ) : (
+              <>
+                Thank you, <strong className="text-ink-800">{form.firstName}</strong>! Please complete your{' '}
+                {paymentMethod === 'easypaisa' ? 'EasyPaisa' : 'Meezan Bank'} transfer of{' '}
+                <strong className="text-ink-800">{formatPrice(placedTotal)}</strong> and send the payment screenshot
+                along with your Order ID on WhatsApp to confirm it.
+              </>
+            )}
+          </p>
+
+          {isTransfer && (
+            <div className="mx-auto mt-5 max-w-sm rounded-2xl border border-amber-200 bg-amber-50 p-5 text-left text-xs leading-relaxed text-amber-900">
+              {paymentMethod === 'easypaisa' ? (
+                <p>
+                  EasyPaisa account: <strong>{EASYPAISA_NUMBER}</strong>
+                </p>
+              ) : (
+                <div className="space-y-1">
+                  <p>
+                    Account title: <strong>{MEEZAN_ACCOUNT_TITLE}</strong>
+                  </p>
+                  <p>
+                    Account number: <strong>{MEEZAN_ACCOUNT_NUMBER}</strong>
+                  </p>
+                  <p>
+                    IBAN: <strong>{MEEZAN_IBAN}</strong>
+                  </p>
+                </div>
+              )}
+              <p className="mt-3">
+                Send the screenshot + Order ID to WhatsApp <strong>{PAYMENT_WHATSAPP_DISPLAY}</strong>:
+              </p>
+              <a
+                href={paymentWhatsAppLink(placedOrderNumber)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 font-display text-xs font-bold text-white transition-all hover:bg-emerald-600"
+              >
+                Send screenshot on WhatsApp
+              </a>
+            </div>
+          )}
+
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link href="/" className="inline-flex items-center gap-2 rounded-2xl border border-surface-300 bg-white px-6 py-3 font-display text-sm font-bold text-ink-700 shadow-sm transition-all hover:shadow-md">
               Back to home
@@ -259,15 +335,63 @@ export default function CheckoutPage() {
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-glow/10 text-violet-glow"><Phone size={15} /></span>
               Payment method
             </h2>
-            <div className="flex items-center gap-3 rounded-xl border-2 border-violet-glow/40 bg-violet-glow/5 px-4 py-3.5">
-              <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-violet-glow">
-                <div className="h-2.5 w-2.5 rounded-full bg-violet-glow" />
-              </div>
-              <div>
-                <p className="font-display text-sm font-bold text-ink-900">Cash on Delivery (COD)</p>
-                <p className="text-xs text-ink-500">Pay when your order arrives at your door.</p>
-              </div>
+            <div className="flex flex-col gap-2.5">
+              {PAYMENT_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setPaymentMethod(opt.value)}
+                  className={cn(
+                    'flex items-start gap-3 rounded-xl border-2 px-4 py-3.5 text-left transition-all',
+                    paymentMethod === opt.value
+                      ? 'border-violet-glow/40 bg-violet-glow/5'
+                      : 'border-surface-200 hover:border-surface-300',
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2',
+                      paymentMethod === opt.value ? 'border-violet-glow' : 'border-surface-300',
+                    )}
+                  >
+                    {paymentMethod === opt.value && <div className="h-2.5 w-2.5 rounded-full bg-violet-glow" />}
+                  </div>
+                  <div>
+                    <p className="font-display text-sm font-bold text-ink-900">{opt.title}</p>
+                    <p className="text-xs text-ink-500">{opt.desc}</p>
+                  </div>
+                </button>
+              ))}
             </div>
+
+            {paymentMethod !== 'cod' && (
+              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-900">
+                {paymentMethod === 'easypaisa' ? (
+                  <p>
+                    Send <strong>{formatPrice(total)}</strong> to EasyPaisa account <strong>{EASYPAISA_NUMBER}</strong>.
+                  </p>
+                ) : (
+                  <div className="space-y-0.5">
+                    <p>
+                      Transfer <strong>{formatPrice(total)}</strong> to:
+                    </p>
+                    <p>
+                      Account title: <strong>{MEEZAN_ACCOUNT_TITLE}</strong>
+                    </p>
+                    <p>
+                      Account number: <strong>{MEEZAN_ACCOUNT_NUMBER}</strong>
+                    </p>
+                    <p>
+                      IBAN: <strong>{MEEZAN_IBAN}</strong>
+                    </p>
+                  </div>
+                )}
+                <p className="mt-2">
+                  After placing your order, send the payment screenshot along with your Order ID on WhatsApp to{' '}
+                  <strong>{PAYMENT_WHATSAPP_DISPLAY}</strong> so we can confirm it.
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -347,7 +471,7 @@ export default function CheckoutPage() {
                 </AnimatePresence>
               </button>
               <p className="mt-3 text-center text-[11px] text-ink-400">
-                Cash on delivery · Taxes included · 7-day returns
+                {paymentMethod === 'cod' ? 'Cash on delivery' : paymentMethod === 'easypaisa' ? 'EasyPaisa transfer' : 'Bank transfer'} · Taxes included · 7-day returns
               </p>
             </div>
           </div>

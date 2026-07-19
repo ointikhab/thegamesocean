@@ -464,7 +464,7 @@ export interface Order {
   id: number;
   orderNumber: string;
   status?: ('pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled') | null;
-  paymentMethod?: 'cod' | null;
+  paymentMethod?: ('cod' | 'easypaisa' | 'meezan_bank') | null;
   customer?: (number | null) | Customer;
   items: {
     product?: (number | null) | Product;

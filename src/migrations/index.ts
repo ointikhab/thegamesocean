@@ -6,6 +6,7 @@ import * as migration_20260706_170427_add_platforms_collection from './20260706_
 import * as migration_20260706_174624_add_used_condition_pricing from './20260706_174624_add_used_condition_pricing';
 import * as migration_20260706_175639_relax_platform_card_required from './20260706_175639_relax_platform_card_required';
 import * as migration_20260709_184719_add_media_hero_size from './20260709_184719_add_media_hero_size';
+import * as migration_20260719_201951_add_payment_methods from './20260719_201951_add_payment_methods';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20260709_184719_add_media_hero_size.up,
     down: migration_20260709_184719_add_media_hero_size.down,
-    name: '20260709_184719_add_media_hero_size'
+    name: '20260709_184719_add_media_hero_size',
+  },
+  {
+    up: migration_20260719_201951_add_payment_methods.up,
+    down: migration_20260719_201951_add_payment_methods.down,
+    name: '20260719_201951_add_payment_methods'
   },
 ];

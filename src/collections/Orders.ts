@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { isAdmin } from '@/access'
 import { ADMIN_EMAIL, orderAdminEmailHtml, sendEmail } from '@/lib/email'
+import { PAYMENT_METHODS } from '@/lib/payment-methods'
 import { sendAdminSms } from '@/lib/sms'
 
 const isAdminOrOwner = ({ req: { user } }: { req: { user: any } }) => {
@@ -50,7 +51,7 @@ export const Orders: CollectionConfig = {
       type: 'select',
       defaultValue: 'cod',
       admin: { position: 'sidebar' },
-      options: [{ label: 'Cash on Delivery', value: 'cod' }],
+      options: PAYMENT_METHODS.map((m) => ({ label: m.label, value: m.value })),
     },
     {
       name: 'customer',
@@ -127,6 +128,7 @@ export const Orders: CollectionConfig = {
           html: orderAdminEmailHtml({
             orderNumber: doc.orderNumber,
             total: doc.total,
+            paymentMethod: doc.paymentMethod,
             shippingAddress: doc.shippingAddress,
             items: doc.items ?? [],
             notes: doc.notes,
