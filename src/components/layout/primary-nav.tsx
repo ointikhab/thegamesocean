@@ -62,7 +62,7 @@ export function PrimaryNav({ items }: { items: NavItem[] }) {
   const overflowItems = items.slice(visibleCount)
 
   return (
-    <div ref={containerRef} className="flex min-w-0 flex-1 items-center overflow-hidden">
+    <div ref={containerRef} className="flex min-w-0 flex-1 items-center">
       <nav className="flex flex-nowrap items-center gap-0.5">
         {visibleItems.map((item) => (
           <NavMenuItem key={item.id ?? item.label} item={item} />
@@ -70,19 +70,23 @@ export function PrimaryNav({ items }: { items: NavItem[] }) {
         {overflowItems.length > 0 && <MoreMenu items={overflowItems} />}
       </nav>
 
-      {/* Off-screen measurer: mirrors every item so we can read natural widths before deciding what fits */}
-      <div
-        ref={measureRef}
-        aria-hidden
-        className="pointer-events-none invisible absolute flex flex-nowrap items-center gap-0.5"
-        style={{ left: -99999, top: -99999 }}
-      >
-        {items.map((item) => (
-          <NavMenuItem key={item.id ?? item.label} item={item} />
-        ))}
-      </div>
-      <div ref={moreRef} aria-hidden className="pointer-events-none invisible absolute" style={{ left: -99999, top: -99999 }}>
-        <MoreButton />
+      {/* Off-screen measurer: mirrors every item so we can read natural widths before deciding what fits.
+          Clipped in its own overflow-hidden wrapper so it can't cause page-level horizontal scroll
+          without also clipping the mega-menu dropdowns rendered inside <nav> above. */}
+      <div className="overflow-hidden">
+        <div
+          ref={measureRef}
+          aria-hidden
+          className="pointer-events-none invisible absolute flex flex-nowrap items-center gap-0.5"
+          style={{ left: -99999, top: -99999 }}
+        >
+          {items.map((item) => (
+            <NavMenuItem key={item.id ?? item.label} item={item} />
+          ))}
+        </div>
+        <div ref={moreRef} aria-hidden className="pointer-events-none invisible absolute" style={{ left: -99999, top: -99999 }}>
+          <MoreButton />
+        </div>
       </div>
     </div>
   )
