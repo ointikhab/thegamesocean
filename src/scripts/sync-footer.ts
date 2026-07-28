@@ -30,6 +30,7 @@ async function run() {
           links: [
             { label: 'Contact Us', href: '/contact' },
             { label: 'Refund & Exchange Policy', href: '/refund-exchange-policy' },
+            { label: 'Shipping Policy', href: '/shipping-policy' },
             { label: 'Track Your Order', href: '/account/orders' },
             { label: 'FAQs', href: '/contact' },
           ],
