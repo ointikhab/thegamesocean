@@ -1,2 +1,2 @@
 export const FREE_SHIPPING_THRESHOLD = 15000
-export const SHIPPING_FEE = 250
+export const SHIPPING_FEE = 350
