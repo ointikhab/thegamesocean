@@ -18,6 +18,7 @@ import {
   paymentWhatsAppLink,
 } from '@/lib/payment-methods'
 import { cn, formatPrice } from '@/lib/utils'
+import { useAuth } from '@/providers/auth-provider'
 import { useCart } from '@/providers/cart-provider'
 import { useToast } from '@/providers/toast-provider'
 
@@ -54,6 +55,7 @@ const LABEL_CLS = 'mb-1.5 block font-display text-xs font-bold uppercase trackin
 
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart()
+  const { customer } = useAuth()
   const { show } = useToast()
 
   const [form, setForm] = useState<FormData>({
@@ -97,6 +99,7 @@ export default function CheckoutPage() {
       orderNumber,
       status: 'pending',
       paymentMethod,
+      customer: customer?.id,
       items: items.map((item) => ({
         product: item.productId,
         titleSnapshot: item.title,

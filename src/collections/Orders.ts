@@ -19,6 +19,56 @@ export const Orders: CollectionConfig = {
     read: isAdminOrOwner,
     update: isAdmin,
   },
+  endpoints: [
+    {
+      path: '/track',
+      method: 'post',
+      // Public guest lookup: an order number alone isn't secret enough to gate on
+      // (they're time+random based but not cryptographically private), so we also
+      // require the phone number used at checkout to match before returning anything.
+      handler: async (req) => {
+        let body: { orderNumber?: string; phone?: string } = {}
+        try {
+          body = (await req.json?.()) ?? {}
+        } catch {
+          body = {}
+        }
+
+        const orderNumber = String(body.orderNumber ?? '').trim()
+        const phoneDigits = String(body.phone ?? '').replace(/\D/g, '')
+
+        if (!orderNumber || phoneDigits.length < 7) {
+          return Response.json(
+            { message: 'Enter your Order ID and the phone number used at checkout.' },
+            { status: 400 },
+          )
+        }
+
+        const result = await req.payload.find({
+          collection: 'orders',
+          where: { orderNumber: { equals: orderNumber } },
+          limit: 1,
+          depth: 0,
+          overrideAccess: true,
+        })
+
+        const order = result.docs[0]
+        const orderPhoneDigits = order?.shippingAddress?.phone
+          ? String(order.shippingAddress.phone).replace(/\D/g, '')
+          : ''
+        const matches = Boolean(order) && orderPhoneDigits.length >= 7 && orderPhoneDigits.slice(-10) === phoneDigits.slice(-10)
+
+        if (!matches) {
+          return Response.json(
+            { message: 'No order found matching that Order ID and phone number.' },
+            { status: 404 },
+          )
+        }
+
+        return Response.json({ doc: order })
+      },
+    },
+  ],
   admin: {
     useAsTitle: 'orderNumber',
     group: 'Storefront',
