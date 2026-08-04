@@ -41,5 +41,26 @@ export const SiteSettings: GlobalConfig = {
         { name: 'href', type: 'text', required: true },
       ],
     },
+    {
+      type: 'collapsible',
+      label: 'Custom Scripts',
+      admin: {
+        description: 'Paste raw HTML/JavaScript (e.g. Google Tag Manager, Meta Pixel) to run on every page.',
+      },
+      fields: [
+        {
+          name: 'headerCode',
+          type: 'textarea',
+          label: 'Header Code',
+          admin: { description: 'Injected near the top of <head> on every page.' },
+        },
+        {
+          name: 'footerCode',
+          type: 'textarea',
+          label: 'Footer Code',
+          admin: { description: 'Injected just before </body> on every page.' },
+        },
+      ],
+    },
   ],
 }

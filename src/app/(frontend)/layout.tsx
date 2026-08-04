@@ -5,6 +5,7 @@ import React from 'react'
 import { AnnouncementTicker } from '@/components/layout/announcement-ticker'
 import { CartDrawer } from '@/components/layout/cart-drawer'
 import { ChatWidget } from '@/components/layout/chat-widget'
+import { CustomScripts } from '@/components/layout/custom-scripts'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { WhatsAppButton } from '@/components/layout/whatsapp-button'
@@ -43,6 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={inter.variable}>
       <body className="bg-surface-100 font-sans text-ink-900 antialiased" suppressHydrationWarning>
+        <CustomScripts html={siteSettings.headerCode} target="head" />
         <Providers>
           <div className="relative flex min-h-screen flex-col">
             <Header siteSettings={siteSettings} header={header} />
@@ -54,6 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <ChatWidget />
           <WhatsAppButton />
         </Providers>
+        <CustomScripts html={siteSettings.footerCode} target="body" />
       </body>
     </html>
   )

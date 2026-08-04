@@ -1081,6 +1081,14 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Injected near the top of <head> on every page.
+   */
+  headerCode?: string | null;
+  /**
+   * Injected just before </body> on every page.
+   */
+  footerCode?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1295,6 +1303,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         href?: T;
         id?: T;
       };
+  headerCode?: T;
+  footerCode?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
