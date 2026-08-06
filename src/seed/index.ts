@@ -1,5 +1,7 @@
 import { getPayload, type Payload } from 'payload'
 
+import { COD_TAX_RATE } from '@/lib/constants'
+
 import config from '@payload-config'
 
 import { generateArtwork } from './generate-artwork'
@@ -431,6 +433,7 @@ async function run() {
       },
     ]
     const subtotal = items.reduce((sum, i) => sum + i.lineTotal, 0)
+    const codTax = Math.round(subtotal * COD_TAX_RATE)
     await payload.create({
       collection: 'orders',
       data: {
@@ -441,7 +444,8 @@ async function run() {
         items,
         subtotal,
         shippingCost: 0,
-        total: subtotal,
+        codTax,
+        total: subtotal + codTax,
         shippingAddress: {
           fullName: ayesha.addresses[0].fullName,
           phone: ayesha.addresses[0].phone,
@@ -468,6 +472,7 @@ async function run() {
       },
     ]
     const subtotal2 = items2.reduce((sum, i) => sum + i.lineTotal, 0)
+    const codTax2 = Math.round(subtotal2 * COD_TAX_RATE)
     await payload.create({
       collection: 'orders',
       data: {
@@ -478,7 +483,8 @@ async function run() {
         items: items2,
         subtotal: subtotal2,
         shippingCost: 0,
-        total: subtotal2,
+        codTax: codTax2,
+        total: subtotal2 + codTax2,
         shippingAddress: {
           fullName: ayesha.addresses[0].fullName,
           phone: ayesha.addresses[0].phone,
@@ -508,6 +514,7 @@ async function run() {
     ]
     const subtotal = items.reduce((sum, i) => sum + i.lineTotal, 0)
     const shippingCost = 0
+    const codTax = Math.round(subtotal * COD_TAX_RATE)
     await payload.create({
       collection: 'orders',
       data: {
@@ -518,7 +525,8 @@ async function run() {
         items,
         subtotal,
         shippingCost,
-        total: subtotal + shippingCost,
+        codTax,
+        total: subtotal + shippingCost + codTax,
         shippingAddress: {
           fullName: hamza.addresses[0].fullName,
           phone: hamza.addresses[0].phone,
