@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { CheckCircle, Headphones, MessageCircle, Send, X, Zap } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 type Field = 'name' | 'email' | 'subject' | 'message'
@@ -11,6 +12,7 @@ type Errors = Partial<Record<Field, string>>
 const INITIAL: FormState = { name: '', email: '', subject: '', message: '' }
 
 export function ChatWidget() {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState<FormState>(INITIAL)
   const [errors, setErrors] = useState<Errors>({})
@@ -62,6 +64,9 @@ export function ChatWidget() {
     setOpen(false)
     if (sent) setTimeout(() => setSent(false), 400)
   }
+
+  // Overlaps the sticky order-summary CTA on checkout, blocking real clicks on "Place order".
+  if (pathname === '/checkout') return null
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">

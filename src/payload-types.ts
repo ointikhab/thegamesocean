@@ -478,6 +478,10 @@ export interface Order {
   }[];
   subtotal: number;
   shippingCost: number;
+  /**
+   * Government-mandated 4% tax applied to Cash on Delivery orders.
+   */
+  codTax: number;
   total: number;
   shippingAddress: {
     fullName: string;
@@ -948,6 +952,7 @@ export interface OrdersSelect<T extends boolean = true> {
       };
   subtotal?: T;
   shippingCost?: T;
+  codTax?: T;
   total?: T;
   shippingAddress?:
     | T

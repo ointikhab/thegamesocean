@@ -138,6 +138,15 @@ export const Orders: CollectionConfig = {
       defaultValue: 0,
     },
     {
+      name: 'codTax',
+      label: 'COD Tax (4%)',
+      type: 'number',
+      required: true,
+      min: 0,
+      defaultValue: 0,
+      admin: { description: 'Government-mandated 4% tax applied to Cash on Delivery orders.' },
+    },
+    {
       name: 'total',
       type: 'number',
       required: true,

@@ -1,12 +1,15 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 
 const RAW_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? ''
 
 export function WhatsAppButton() {
+  const pathname = usePathname()
   const digits = RAW_NUMBER.replace(/[^0-9]/g, '')
-  if (!digits) return null
+  // Overlaps the sticky order-summary CTA on checkout, blocking real clicks on "Place order".
+  if (!digits || pathname === '/checkout') return null
 
   const href = `https://wa.me/${digits}`
 

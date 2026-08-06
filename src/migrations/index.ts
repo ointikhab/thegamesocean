@@ -8,6 +8,7 @@ import * as migration_20260706_175639_relax_platform_card_required from './20260
 import * as migration_20260709_184719_add_media_hero_size from './20260709_184719_add_media_hero_size';
 import * as migration_20260719_201951_add_payment_methods from './20260719_201951_add_payment_methods';
 import * as migration_20260804_081054_add_custom_scripts from './20260804_081054_add_custom_scripts';
+import * as migration_20260806_122811_add_cod_tax from './20260806_122811_add_cod_tax';
 
 export const migrations = [
   {
@@ -58,6 +59,11 @@ export const migrations = [
   {
     up: migration_20260804_081054_add_custom_scripts.up,
     down: migration_20260804_081054_add_custom_scripts.down,
-    name: '20260804_081054_add_custom_scripts'
+    name: '20260804_081054_add_custom_scripts',
+  },
+  {
+    up: migration_20260806_122811_add_cod_tax.up,
+    down: migration_20260806_122811_add_cod_tax.down,
+    name: '20260806_122811_add_cod_tax'
   },
 ];

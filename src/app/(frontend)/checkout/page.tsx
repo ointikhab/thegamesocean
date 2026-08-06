@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import { Reveal } from '@/components/ui/reveal'
-import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/lib/constants'
+import { COD_TAX_RATE, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/lib/constants'
 import {
   EASYPAISA_NUMBER,
   MEEZAN_ACCOUNT_NUMBER,
@@ -70,7 +70,8 @@ export default function CheckoutPage() {
   const [placedTotal, setPlacedTotal] = useState(0)
 
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD || items.length === 0 ? 0 : SHIPPING_FEE
-  const total = subtotal + shipping
+  const codTax = paymentMethod === 'cod' ? Math.round(subtotal * COD_TAX_RATE) : 0
+  const total = subtotal + shipping + codTax
 
   const set = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((f) => ({ ...f, [field]: e.target.value }))
@@ -111,6 +112,7 @@ export default function CheckoutPage() {
       })),
       subtotal,
       shippingCost: shipping,
+      codTax,
       total,
       shippingAddress: {
         fullName: `${form.firstName} ${form.lastName}`.trim(),
@@ -444,6 +446,17 @@ export default function CheckoutPage() {
                   Add {formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} more for free delivery
                 </div>
               )}
+              {paymentMethod === 'cod' && (
+                <>
+                  <div className="flex justify-between text-sm text-ink-500">
+                    <span>COD Tax (4%)</span>
+                    <span className="font-semibold text-ink-800">{formatPrice(codTax)}</span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-ink-400">
+                    As per Government of Pakistan directives, a 4% tax applies to Cash on Delivery orders.
+                  </p>
+                </>
+              )}
               <div className="flex justify-between border-t border-surface-200 pt-3">
                 <span className="font-display font-bold text-ink-900">Total</span>
                 <span className="font-display text-xl font-extrabold text-violet-glow">{formatPrice(total)}</span>
@@ -474,7 +487,7 @@ export default function CheckoutPage() {
                 </AnimatePresence>
               </button>
               <p className="mt-3 text-center text-[11px] text-ink-400">
-                {paymentMethod === 'cod' ? 'Cash on delivery' : paymentMethod === 'easypaisa' ? 'EasyPaisa transfer' : 'Bank transfer'} · Taxes included · 7-day returns
+                {paymentMethod === 'cod' ? 'Cash on delivery · 4% COD tax applied' : paymentMethod === 'easypaisa' ? 'EasyPaisa transfer · Taxes included' : 'Bank transfer · Taxes included'} · 7-day returns
               </p>
             </div>
           </div>
